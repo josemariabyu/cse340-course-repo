@@ -1,0 +1,85 @@
+/* Configuración básica y tipografía legible */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f4f7f6;
+}
+
+/* Encabezado y Navegación */
+header {
+    background-color: #1a365d;
+    color: #fff;
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 1rem 0;
+    font-size: 2rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Hace que se adapte a celulares */
+}
+
+nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #fff;
+}
+
+/* Contenido Principal */
+main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    color: #2b6cb0;
+}
+
+/* Listas estilizadas */
+ul.categories-list {
+    padding-left: 1.2rem;
+}
+
+ul.categories-list li {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Contenedor de imágenes responsivas */
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+/* Pie de Página */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #2d3748;
+    color: #a0aec0;
+    font-size: 0.9rem;
+    margin-top: 3rem;
+}
