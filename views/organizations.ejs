@@ -1,8 +1,36 @@
 <%- include('partials/header') %>
 <h2>Nuestras Organizaciones</h2>
 <p>Cooperamos con diferentes instituciones sin fines de lucro para lograr un cambio real.</p>
-<!-- Espacio para la imagen requerida por la rúbrica -->
-<div class="image-container">
-    <img src="/images/logo.png" alt="Logotipo de Organización de Servicio" width="300">
+
+<div class="organizations-container" style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1.5rem;">
+    
+    <!-- Organización 1 -->
+    <div class="org-item" style="border-bottom: 1px solid #eee; padding-bottom: 1.5rem;">
+        <h3>1. Organización Conectar</h3>
+        <p>Iniciativa enfocada en la inclusión digital y desarrollo de proyectos tecnológicos comunitarios.</p>
+        <div class="image-container">
+            <img src="/images/org1.png" alt="Logotipo de Organización Conectar" width="250">
+        </div>
+    </div>
+
+    <!-- Organización 2 -->
+    <div class="org-item" style="border-bottom: 1px solid #eee; padding-bottom: 1.5rem;">
+        <h3>2. Fundación Manos Abiertas</h3>
+        <p>Centro dedicado al apoyo escolar, talleres educativos y asistencia a la niñez.</p>
+        <div class="image-container">
+            <img src="/images/org2.png" alt="Logotipo de Fundación Manos Abiertas" width="250">
+        </div>
+    </div>
+
+    <!-- Organización 3 -->
+    <div class="org-item" style="padding-bottom: 1.5rem;">
+        <h3>3. EcoVida</h3>
+        <p>Agrupación de voluntarios orientada al cuidado del medio ambiente y reciclaje urbano.</p>
+        <div class="image-container">
+            <img src="/images/org3.png" alt="Logotipo de EcoVida" width="250">
+        </div>
+    </div>
+
 </div>
+
 <%- include('partials/footer') %>
