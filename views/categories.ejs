@@ -1,13 +1,10 @@
-<%- include('partials/header') %>
-
-<h2>Categorías de Proyectos de Servicio</h2>
-<p>Explora los diferentes sectores donde puedes colaborar:</p>
-
-<ul class="categories-list">
-    <li>Environmental (Medio Ambiente)</li>
-    <li>Educational (Educación)</li>
-    <li>Community Service (Servicio Comunitario)</li>
-    <li>Health and Wellness (Salud y Bienestar)</li>
+<h1><%= title %></h1>
+<ul>
+  <% if (locals.categories && categories.length > 0) { %>
+    <% categories.forEach(category => { %>
+      <li><%= category.name %></li>
+    <% }); %>
+  <% } else { %>
+    <li>No hay categorías disponibles.</li>
+  <% } %>
 </ul>
-
-<%- include('partials/footer') %>

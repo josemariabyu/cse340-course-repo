@@ -1,4 +1,14 @@
-<%- include('partials/header') %>
-<h2>Proyectos de Servicio Activos</h2>
-<p>Explora las iniciativas actuales en las que puedes inscribirte para participar hoy mismo.</p>
-<%- include('partials/footer') %>
+<h1><%= title %></h1>
+<ul>
+  <% if (locals.projects && projects.length > 0) { %>
+    <% projects.forEach(project => { %>
+      <li>
+        <%= new Date(project.date).toLocaleDateString() %>: 
+        <strong><%= project.title %></strong> 
+        (<%= project.organization_name %>)
+      </li>
+    <% }); %>
+  <% } else { %>
+    <li>No hay proyectos de servicio disponibles.</li>
+  <% } %>
+</ul>
