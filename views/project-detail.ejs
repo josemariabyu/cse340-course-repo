@@ -1,0 +1,21 @@
+<h1><%= project.title %></h1>
+
+<p><strong>Organización Aliada:</strong> <%= project.organization_name %></p>
+<p><strong>Descripción:</strong> <%= project.description %></p>
+<p><strong>Ubicación:</strong> <%= project.location %></p>
+<p><strong>Fecha:</strong> <%= new Date(project.date).toLocaleDateString() %></p>
+
+<h3>Categorías del Proyecto:</h3>
+<div class="category-tags">
+  <% if (locals.categories && categories.length > 0) { %>
+    <% categories.forEach(cat => { %>
+      <a href="/categories/<%= cat.category_id %>" class="tag-link" style="background: #e0e0e0; padding: 5px 10px; margin-right: 5px; border-radius: 4px; text-decoration: none; color: #333;">
+        <%= cat.name %>
+      </a>
+    <% }); %>
+  <% } else { %>
+    <span>Este proyecto no tiene categorías asignadas.</span>
+  <% } %>
+</div>
+
+<p style="margin-top: 20px;"><a href="/projects">← Volver a todos los proyectos</a></p>

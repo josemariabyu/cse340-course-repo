@@ -1,0 +1,18 @@
+<h1>Categoría: <%= category.name %></h1>
+
+<h2>Proyectos en esta categoría</h2>
+<ul>
+  <% if (locals.projects && projects.length > 0) { %>
+    <% projects.forEach(project => { %>
+      <li>
+        <!-- Link a la página de detalles del proyecto -->
+        <a href="/project/<%= project.project_id %>"><%= project.title %></a>
+        <p><%= project.description %></p>
+      </li>
+    <% }); %>
+  <% } else { %>
+    <li>No hay proyectos registrados para esta categoría todavía.</li>
+  <% } %>
+</ul>
+
+<p><a href="/categories">← Volver a todas las categorías</a></p>
