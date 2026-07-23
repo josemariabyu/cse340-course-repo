@@ -40,20 +40,18 @@ app.get('/organizations', (req, res) => {
 // Ruta para Proyectos (Actividad en Equipo) - Conexión Real a Base de Datos
 // Nota: En la próxima semana podrías mover esto a un controlador para MVC estricto, por ahora lo dejamos limpio.
 import db from './src/config/db-connect.js'; 
-app.get('/projects', async (req, res) => {
-  try {
-    const query = `
-      SELECT p.*, o.name as organization_name 
-      FROM service_projects p 
-      JOIN organizations o ON p.organization_id = o.organization_id 
-      ORDER BY p.date DESC
-    `;
-    const result = await db.query(query);
-    res.render('projects', { title: 'Service Projects', projects: result.rows });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error al cargar proyectos");
-  }
+// Ruta para Proyectos (Actividad en Equipo) - Con datos de prueba seguros para Render
+app.get('/projects', (req, res) => {
+  const proyectosMock = [
+    { project_id: 1, name: "Community Garden Cleanup", date: "2026-03-15", organization_name: "Green Earth Eco" },
+    { project_id: 2, name: "Food Drive Distribution", date: "2026-03-10", organization_name: "Helping Hands" },
+    { project_id: 3, name: "A neat service project", date: "2026-03-01", organization_name: "A great organization" }
+  ];
+  
+  res.render('projects', { 
+    title: 'Service Projects', 
+    projects: proyectosMock 
+  });
 });
 
 // MONTAJE DE NUESTRAS NUEVAS RUTAS (¡Ahora arriba del app.listen!)
