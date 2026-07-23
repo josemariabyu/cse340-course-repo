@@ -1,10 +1,18 @@
-<%- include('partials/header') %>
-<h2>Bienvenido a la Página de Inicio</h2>
-<p>Este es el comienzo de nuestra plataforma de proyectos de servicio. Aquí encontrarás toda la información principal de nuestra comunidad.</p>
+<%- include('partials/header') %> 
 
-<!-- Imagen para la página de inicio requerida por el profesor -->
-<div class="image-container" style="text-align: center; margin-top: 1.5rem;">
-    <img src="/images/home.png" alt="Imagen de Bienvenida" width="500">
+<h2>Bienvenido a la Página de Inicio</h2> 
+<p>Este es el comienzo de nuestra plataforma de proyectos de servicio. Aquí encontrarás toda la información principal de nuestra comunidad.</p> 
+
+<!-- ¡NUEVO SECCIÓN DE ENLACES CLICKEABLES PARA EL PROFESOR! -->
+<div class="navigation-links" style="text-align: center; margin: 2rem 0; padding: 1rem; background-color: #f4f4f9; border-radius: 8px;">
+    <h3>Explora la aplicación:</h3>
+    <a href="/projects" style="display: inline-block; padding: 10px 20px; margin: 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Ver Proyectos de Servicio (Projects)</a>
+    <a href="/organizations" style="display: inline-block; padding: 10px 20px; margin: 10px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Ver Organizaciones (Organizations)</a>
 </div>
+
+<!-- Imagen para la página de inicio requerida por el profesor --> 
+<div class="image-container" style="text-align: center; margin-top: 1.5rem;"> 
+    <img src="/images/home.png" alt="Imagen de Bienvenida" width="500"> 
+</div> 
 
 <%- include('partials/footer') %>
