@@ -19,12 +19,12 @@ const __dirname = path.dirname(__filename);
 // 2. Middleware para servir archivos estáticos (CSS e imágenes desde /public)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. Configurar EJS como el motor de plantillas de la aplicación
+// 3. Configurar EJS como el motor de plantillas de la aplicación (¡Ruta corregida dentro de src!)
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src', 'views'));
 
 // ==========================================
-// 4. RUTAS DE LA APLICACIÓN
+// 4. RUTAS DE LA APLICACIÓN (Bajo patrón MVC)
 // ==========================================
 
 // Ruta para la página de Inicio (Home)
@@ -32,36 +32,21 @@ app.get('/', (req, res) => {
   res.render('home', { title: 'Home' });
 });
 
-// Ruta para Organizaciones
+// Ruta para Organizaciones (Vista estática básica por ahora)
 app.get('/organizations', (req, res) => {
   res.render('organizations', { title: 'Organizations' });
 });
 
-// Ruta para Proyectos (Actividad en Equipo) - Conexión Real a Base de Datos
-// Nota: En la próxima semana podrías mover esto a un controlador para MVC estricto, por ahora lo dejamos limpio.
-import db from './src/config/db-connect.js'; 
-// Ruta para Proyectos (Actividad en Equipo) - Con datos de prueba seguros para Render
-app.get('/projects', (req, res) => {
-  const proyectosMock = [
-    { project_id: 1, name: "Community Garden Cleanup", date: "2026-03-15", organization_name: "Green Earth Eco" },
-    { project_id: 2, name: "Food Drive Distribution", date: "2026-03-10", organization_name: "Helping Hands" },
-    { project_id: 3, name: "A neat service project", date: "2026-03-01", organization_name: "A great organization" }
-  ];
-  
-  res.render('projects', { 
-    title: 'Service Projects', 
-    projects: proyectosMock 
-  });
-});
-
-// MONTAJE DE NUESTRAS NUEVAS RUTAS (¡Ahora arriba del app.listen!)
+// MONTAJE DE NUESTRAS NUEVAS RUTAS (Delegadas a sus respectivos enrutadores)
 app.use('/categories', categoryRoutes);
-app.use('/category', categoryRoutes); // Acepta singular por si las moscas
-app.use('/project', projectRoutes);
+app.use('/category', categoryRoutes);
+
+app.use('/projects', projectRoutes); 
+app.use('/project', projectRoutes); 
 
 // ==========================================
-// 5. INICIAR EL SERVIDOR LOCAL (Siempre al final)
+// 5. INICIAR EL SERVIDOR LOCAL
 // ==========================================
 app.listen(port, () => {
-  console.log(`Servidor backend corriendo localmente en http://localhost:${port}`);
+  console.log(`Servidor backend corriendo en el puerto ${port}`);
 });
