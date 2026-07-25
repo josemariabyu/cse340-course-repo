@@ -8,7 +8,7 @@ export async function getCategoriesList(req, res, next) {
 
         res.render('categories', {
             title: 'Categories & Organizations',
-            categories: categories
+            categories: categories || []
         });
     } catch (error) {
         console.error("Error en getCategoriesList controller: ", error);
@@ -21,6 +21,8 @@ export async function getCategoryDetails(req, res, next) {
     try {
         const categoryId = req.params.id;
         const categoryRows = await getCategoryById(categoryId);
+        
+        // CORRECCIÓN CRÍTICA: Extraemos la primera fila [0]
         const category = categoryRows && categoryRows.length > 0 ? categoryRows[0] : null;
 
         if (!category) {
@@ -31,10 +33,10 @@ export async function getCategoryDetails(req, res, next) {
 
         const rawProjects = await getProjectsByCategory(categoryId);
 
-        // Mapeamos 'title' a 'name' para que la vista renderice el enlace correctamente
+        // Mapeamos 'title' de la BD a 'name' para compatibilidad con la vista
         const projects = rawProjects.map(proj => ({
             project_id: proj.project_id,
-            name: proj.title, // Transforma 'title' en 'name' para la plantilla
+            name: proj.title, 
             date: proj.date
         }));
 
@@ -48,4 +50,5 @@ export async function getCategoryDetails(req, res, next) {
         next(error);
     }
 }
+
 
