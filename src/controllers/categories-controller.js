@@ -1,15 +1,14 @@
-// 1. Mostrar la lista general de categorías o organizaciones (/categories)
+import { getAllCategories, getCategoryById } from '../models/categories.js';
+import { getProjectsByCategory } from '../models/projects.js';
+
+// 1. Mostrar la lista general de categorías (/categories)
 export async function getCategoriesList(req, res, next) {
     try {
-        const categoriesMock = [
-            { category_id: 1, name: "Environment", description: "Projects focusing on nature and cleanup." },
-            { category_id: 2, name: "Food Assistance", description: "Food drives and distribution centers." },
-            { category_id: 3, name: "Education", description: "Tutoring and mentoring programs." }
-        ];
+        const categories = await getAllCategories();
 
         res.render('categories', {
             title: 'Categories & Organizations',
-            categories: categoriesMock
+            categories: categories
         });
     } catch (error) {
         console.error("Error en getCategoriesList controller: ", error);
@@ -17,24 +16,36 @@ export async function getCategoriesList(req, res, next) {
     }
 }
 
-// 2. Mostrar el detalle de una categoría específica (/category/:id)
+// 2. Mostrar el detalle de una categoría específica y sus proyectos asociados (/category/:id)
 export async function getCategoryDetails(req, res, next) {
     try {
         const categoryId = req.params.id;
-        
-        // Simulación de objeto recuperado por id
-        const categoryMock = {
-            category_id: categoryId,
-            name: "Selected Organization Category",
-            description: "Detailed description of the services provided by this entity."
-        };
+        const categoryRows = await getCategoryById(categoryId);
+        const category = categoryRows && categoryRows.length > 0 ? categoryRows[0] : null;
+
+        if (!category) {
+            const err = new Error('Category not found');
+            err.status = 404;
+            return next(err);
+        }
+
+        const rawProjects = await getProjectsByCategory(categoryId);
+
+        // Mapeamos 'title' a 'name' para que la vista renderice el enlace correctamente
+        const projects = rawProjects.map(proj => ({
+            project_id: proj.project_id,
+            name: proj.title, // Transforma 'title' en 'name' para la plantilla
+            date: proj.date
+        }));
 
         res.render('category-detail', {
-            title: 'Category Details',
-            category: categoryMock
+            title: category.name,
+            category: category,
+            projects: projects || []
         });
     } catch (error) {
         console.error("Error en getCategoryDetails controller: ", error);
         next(error);
     }
 }
+
