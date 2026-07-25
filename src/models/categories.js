@@ -1,59 +1,45 @@
 import db from '../config/db-connect.js';
 
-// 1. Obtener una sola categoría por su ID
-export async function getCategoryById(categoryId) {
+// 1. Recuperar una sola categoría por su ID
+export async function getCategoryById(category_id) {
   try {
-    const sql = "SELECT * FROM public.categories WHERE category_id = $1";
-    const result = await db.query(sql, [categoryId]);
+    const sql = "SELECT * FROM categories WHERE category_id = $1";
+    const result = await db.query(sql, [category_id]);
     return result.rows;
   } catch (error) {
-    console.error("getCategoryById error: " + error);
+    console.error("Error en model getCategoryById: " + error);
     throw error;
   }
 }
 
-// 2. Obtener todas las categorías para un proyecto de servicio dado (para las etiquetas/tags)
-export async function getCategoriesByProject(projectId) {
-  try {
-    const sql = `
-      SELECT c.* FROM public.categories c
-      JOIN public.project_categories pc ON c.category_id = pc.category_id
-      WHERE pc.project_id = $1
-    `;
-    const result = await db.query(sql, [projectId]);
-    return result.rows;
-  } catch (error) {
-    console.error("getCategoriesByProject error: " + error);
-    throw error;
-  }
-}
-
-// 3. Obtener todos los proyectos de servicio para una categoría dada
-export async function getProjectsByCategory(categoryId) {
-  try {
-    const sql = `
-      SELECT sp.* FROM public.service_projects sp
-      JOIN public.project_categories pc ON sp.project_id = pc.project_id
-      WHERE pc.category_id = $1
-    `;
-    const result = await db.query(sql, [categoryId]);
-    return result.rows;
-  } catch (error) {
-    console.error("getProjectsByCategory error: " + error);
-    throw error;
-  }
-}
-
-// Obtener todas las categorías (para la página principal de categorías /categories)
+// 2. Recuperar todas las categorías del sistema para la página principal
 export async function getAllCategories() {
   try {
-    const sql = "SELECT * FROM public.categories ORDER BY name ASC";
+    const sql = "SELECT * FROM categories ORDER BY name ASC";
     const result = await db.query(sql);
     return result.rows;
   } catch (error) {
-    console.error("getAllCategories error: " + error);
+    console.error("Error en model getAllCategories: " + error);
     throw error;
   }
 }
+
+// 3. Recuperar todas las categorías vinculadas a un proyecto de servicio específico
+export async function getCategoriesByProject(project_id) {
+  try {
+    const sql = `
+      SELECT c.* 
+      FROM categories c
+      JOIN project_categories pc ON c.category_id = pc.category_id
+      WHERE pc.project_id = $1
+    `;
+    const result = await db.query(sql, [project_id]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error en model getCategoriesByProject: " + error);
+    throw error;
+  }
+}
+
 
 
