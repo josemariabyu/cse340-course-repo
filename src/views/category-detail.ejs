@@ -1,27 +1,28 @@
 <%- include('partials/header') %>
 
-<h2>Categoría: <%= category.name %></h2>
-<p style="color: #6c757d; font-style: italic;"><%= category.description %></p>
+<h2>Detalles del Proyecto: <%= project.title %></h2>
 
-<h3 style="margin-top: 2rem;">Proyectos asociados a esta categoría:</h3>
-
-<% if (projects && projects.length > 0) { %>
-    <ul class="category-projects-list" style="margin-top: 1rem; line-height: 2;">
-        <% projects.forEach(project => { %>
-            <li>
-                🚀 <a href="/project/<%= project.project_id %>" style="font-weight: bold; color: #007bff; text-decoration: none;"><%= project.name %></a> 
-                <span style="color: #6c757d; font-size: 0.9em;">(Fecha: <%= project.date %>)</span>
-            </td>
-        <% }) %>
-    </ul>
-<% } else { %>
-    <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 5px; margin-top: 1rem;">
-        No hay proyectos de servicio registrados actualmente para esta categoría.
+<div class="project-card-detail" style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-top: 1.5rem;">
+    <p><strong>Descripción:</strong> <%= project.description || "Sin descripción disponible." %></p>
+    <p><strong>Ubicación:</strong> <%= project.location || "Centro Comunitario" %></p>
+    <p><strong>Organización:</strong> <%= project.organization_name || "Organización Asociada" %></p>
+    
+    <div class="tags" style="margin-top: 1rem;">
+        <strong>Categorías vinculadas:</strong>
+        <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+                <a href="/category/<%= cat.category_id %>" style="background: #e2e3e5; color: #383d41; padding: 4px 10px; border-radius: 3px; font-size: 0.9em; margin-right: 5px; text-decoration: none;">
+                    🏷️ <%= cat.name %>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <span style="color: #6c757d; font-style: italic;">Ninguna categoría asignada</span>
+        <% } %>
     </div>
-<% } %>
+</div>
 
-<div style="margin-top: 2.5rem;">
-    <a href="/categories" style="color: #28a745; text-decoration: none;">← Volver a Categorías</a>
+<div style="margin-top: 2rem;">
+    <a href="/projects" style="color: #007bff; text-decoration: none;">← Volver a Proyectos</a>
 </div>
 
 <%- include('partials/footer') %>
