@@ -14,10 +14,9 @@ export async function getAllProjects(req, res, next) {
         `;
         const result = await db.query(query);
         
-        // Mapeamos los resultados para asegurar compatibilidad con las vistas
         const viewsProjects = result.rows.map(proj => ({
             project_id: proj.project_id,
-            name: proj.title, // Sincroniza 'title' de la BD con 'name' de la vista
+            name: proj.title, 
             date: proj.date,
             organization_name: proj.organization_name
         }));
@@ -37,6 +36,8 @@ export async function getProjectDetails(req, res, next) {
     try { 
         const projectId = req.params.id; 
         const projectRows = await getProjectById(projectId); 
+        
+        // CORRECCIÓN CRÍTICA: Extraemos la primera fila [0]
         const rawProject = projectRows && projectRows.length > 0 ? projectRows[0] : null; 
 
         if (!rawProject) { 
@@ -45,9 +46,8 @@ export async function getProjectDetails(req, res, next) {
             return next(err); 
         } 
 
-        // Adaptamos el objeto a la estructura que espera tu vista project-detail.ejs
         const project = {
-            title: rawProject.title, // Mantiene el título
+            title: rawProject.title, 
             description: rawProject.description,
             location: rawProject.location,
             organization_name: rawProject.organization_name
@@ -66,3 +66,4 @@ export async function getProjectDetails(req, res, next) {
     } 
 }
 
+           
