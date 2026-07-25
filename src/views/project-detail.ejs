@@ -1,21 +1,25 @@
-<h1><%= project.title %></h1>
+<%- include('partials/header') %>
 
-<p><strong>Organización Aliada:</strong> <%= project.organization_name %></p>
-<p><strong>Descripción:</strong> <%= project.description %></p>
-<p><strong>Ubicación:</strong> <%= project.location %></p>
-<p><strong>Fecha:</strong> <%= new Date(project.date).toLocaleDateString() %></p>
+<h2>Detalles del Proyecto: <%= project.title || "Service Project" %></h2>
 
-<h3>Categorías del Proyecto:</h3>
-<div class="category-tags">
-  <% if (locals.categories && categories.length > 0) { %>
-    <% categories.forEach(cat => { %>
-      <a href="/categories/<%= cat.category_id %>" class="tag-link" style="background: #e0e0e0; padding: 5px 10px; margin-right: 5px; border-radius: 4px; text-decoration: none; color: #333;">
-        <%= cat.name %>
-      </a>
-    <% }); %>
-  <% } else { %>
-    <span>Este proyecto no tiene categorías asignadas.</span>
-  <% } %>
+<div class="project-card-detail" style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-top: 1.5rem;">
+    <p><strong>Descripción:</strong> <%= project.description || "No description provided." %></p>
+    <p><strong>Ubicación:</strong> <%= project.location || "Community Center" %></p>
+    
+    <div class="tags" style="margin-top: 1rem;">
+        <strong>Categorías vinculadas:</strong>
+        <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+                <span style="background: #e2e3e5; padding: 3px 8px; border-radius: 3px; font-size: 0.9em; margin-right: 5px;"><%= cat.name %></span>
+            <% }) %>
+        <% } else { %>
+            <span style="color: #6c757d; font-style: italic;">Ninguna categoría asignada</span>
+        <% } %>
+    </div>
 </div>
 
-<p style="margin-top: 20px;"><a href="/projects">← Volver a todos los proyectos</a></p>
+<div style="margin-top: 2rem;">
+    <a href="/projects" style="color: #007bff; text-decoration: none;">← Volver a Proyectos</a>
+</div>
+
+<%- include('partials/footer') %>

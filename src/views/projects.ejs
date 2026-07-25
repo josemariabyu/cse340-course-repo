@@ -1,15 +1,20 @@
-<h1><%= title %></h1>
-<ul>
-  <% if (locals.projects && projects.length > 0) { %>
+<%- include('partials/header') %>
+
+<h2><%= title %></h2>
+<p>Explora los proyectos de servicio activos en nuestra comunidad:</p>
+
+<ul class="projects-list" style="margin-top: 1.5rem; line-height: 2;">
     <% projects.forEach(project => { %>
-      <li>
-        <%= new Date(project.date).toLocaleDateString() %>: 
-        <strong><%= project.title %></strong> 
-        (<%= project.organization_name %>)
-      </li>
-    <% }); %>
-  <% } else { %>
-    <li>No hay proyectos de servicio disponibles.</li>
-  <% } %>
+        <li>
+            <a href="/project/<%= project.project_id %>" style="font-weight: bold; color: #007bff;"><%= project.name %></a> 
+            - 
+            <a href="/organizations" style="color: #28a745;"><%= project.organization_name %></a>
+        </li>
+    <% }) %>
 </ul>
 
+<div style="margin-top: 2rem;">
+    <a href="/" style="color: #6c757d; text-decoration: none;">← Volver al Inicio</a>
+</div>
+
+<%- include('partials/footer') %>
