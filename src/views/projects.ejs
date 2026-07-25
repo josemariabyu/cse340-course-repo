@@ -6,9 +6,9 @@
 <ul class="projects-list" style="margin-top: 1.5rem; line-height: 2;">
     <% projects.forEach(project => { %>
         <li>
-            <a href="/project/<%= project.project_id %>" style="font-weight: bold; color: #007bff;"><%= project.name %></a> 
+            🚀 <a href="/project/<%= project.project_id %>" style="font-weight: bold; color: #007bff; text-decoration: none;"><%= project.name %></a> 
             - 
-            <a href="/organizations" style="color: #28a745;"><%= project.organization_name %></a>
+            <a href="/organizations" style="color: #28a745; text-decoration: none;"><%= project.organization_name %></a>
         </li>
     <% }) %>
 </ul>

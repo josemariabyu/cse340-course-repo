@@ -1,33 +1,37 @@
 import db from '../config/db-connect.js';
 
-export const getAllProjects = async () => {
-    try {
-        const query = `
-            SELECT p.*, o.name as organization_name 
-            FROM service_projects p
-            JOIN organizations o ON p.organization_id = o.organization_id
-            ORDER BY p.date DESC
-        `;
-        const result = await db.query(query);
-        return result.rows;
-    } catch (error) {
-        console.error("Error al obtener proyectos:", error);
-        throw error;
-    }
-};
-// Obtener un solo proyecto por su ID con el nombre de su organización aliado
-export const getProjectById = async (projectId) => {
+// 1. Recuperar un proyecto específico por su ID con su organización vinculada
+export async function getProjectById(project_id) {
   try {
-    const query = `
+    const sql = `
       SELECT p.*, o.name as organization_name 
-      FROM service_projects p
-      JOIN organizations o ON p.organization_id = o.organization_id
+      FROM service_projects p 
+      LEFT JOIN organizations o ON p.organization_id = o.organization_id 
       WHERE p.project_id = $1
     `;
-    const result = await db.query(query, [projectId]);
-    return result.rows[0]; // Retorna el primer resultado (el proyecto único)
+    const result = await db.query(sql, [project_id]);
+    return result.rows; 
   } catch (error) {
-    console.error("Error al obtener proyecto por ID:", error);
+    console.error("Error en model getProjectById: " + error);
     throw error;
   }
-};
+}
+
+// 2. Recuperar todos los proyectos vinculados a una categoría específica
+export async function getProjectsByCategory(category_id) {
+  try {
+    const sql = `
+      SELECT p.* 
+      FROM service_projects p
+      JOIN project_categories pc ON p.project_id = pc.project_id
+      WHERE pc.category_id = $1
+      ORDER BY p.date DESC
+    `;
+    const result = await db.query(sql, [category_id]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error en model getProjectsByCategory: " + error);
+    throw error;
+  }
+}
+

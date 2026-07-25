@@ -1,13 +1,21 @@
-<h1><%= title %></h1>
-<ul>
-  <% if (locals.categories && categories.length > 0) { %>
-    <% categories.forEach(category => { %>
-      <li>
-        <!-- Envolvemos el nombre en un enlace usando su id -->
-        <a href="/categories/<%= category.category_id %>"><%= category.name %></a>
-      </li>
-    <% }); %>
-  <% } else { %>
-    <li>No hay categorías disponibles.</li>
-  <% } %>
+<%- include('partials/header') %>
+
+<h2><%= title %></h2>
+<p>Selecciona una categoría para explorar sus proyectos de servicio vinculados:</p>
+
+<ul class="categories-list" style="margin-top: 1.5rem; line-height: 2.5; font-size: 1.1em;">
+    <% categories.forEach(cat => { %>
+        <li>
+            📁 <a href="/category/<%= cat.category_id %>" style="font-weight: bold; color: #28a745; text-decoration: none;"><%= cat.name %></a>
+            <br>
+            <small style="color: #6c757d; margin-left: 1.5rem;"><%= cat.description || "Sin descripción disponible." %></small>
+        </li>
+    <% }) %>
 </ul>
+
+<div style="margin-top: 2.5rem;">
+    <a href="/" style="color: #007bff; text-decoration: none;">← Volver al Inicio</a>
+</div>
+
+<%- include('partials/footer') %>
+

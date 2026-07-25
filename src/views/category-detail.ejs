@@ -1,18 +1,28 @@
-<h1>Categoría: <%= category.name %></h1>
+<%- include('partials/header') %>
 
-<h2>Proyectos en esta categoría</h2>
-<ul>
-  <% if (locals.projects && projects.length > 0) { %>
-    <% projects.forEach(project => { %>
-      <li>
-        <!-- Link a la página de detalles del proyecto -->
-        <a href="/project/<%= project.project_id %>"><%= project.title %></a>
-        <p><%= project.description %></p>
-      </li>
-    <% }); %>
-  <% } else { %>
-    <li>No hay proyectos registrados para esta categoría todavía.</li>
-  <% } %>
-</ul>
+<h2>Detalles del Proyecto: <%= project.title %></h2>
 
-<p><a href="/categories">← Volver a todas las categorías</a></p>
+<div class="project-card-detail" style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-top: 1.5rem;">
+    <p><strong>Descripción:</strong> <%= project.description || "Sin descripción disponible." %></p>
+    <p><strong>Ubicación:</strong> <%= project.location || "Centro Comunitario" %></p>
+    <p><strong>Organización:</strong> <%= project.organization_name || "Organización Asociada" %></p>
+    
+    <div class="tags" style="margin-top: 1rem;">
+        <strong>Categorías vinculadas:</strong>
+        <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+                <a href="/category/<%= cat.category_id %>" style="background: #e2e3e5; color: #383d41; padding: 4px 10px; border-radius: 3px; font-size: 0.9em; margin-right: 5px; text-decoration: none;">
+                    🏷️ <%= cat.name %>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <span style="color: #6c757d; font-style: italic;">Ninguna categoría asignada</span>
+        <% } %>
+    </div>
+</div>
+
+<div style="margin-top: 2rem;">
+    <a href="/projects" style="color: #007bff; text-decoration: none;">← Volver a Proyectos</a>
+</div>
+
+<%- include('partials/footer') %>

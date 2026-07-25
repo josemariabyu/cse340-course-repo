@@ -1,19 +1,29 @@
 import { getProjectById } from '../models/projects.js'; 
 import { getCategoriesByProject } from '../models/categories.js'; 
+import db from '../config/db-connect.js';
 
-// 1. Mostrar la lista de todos los proyectos de servicio (/projects)
+// 1. Mostrar la lista de los próximos 5 proyectos de servicio (/projects)
 export async function getAllProjects(req, res, next) {
     try {
-        // Datos de prueba estáticos estables para asegurar que Render no falle
-        const projectsMock = [
-            { project_id: 1, name: "Community Garden Cleanup", date: "2026-03-15", organization_name: "Green Earth Eco" },
-            { project_id: 2, name: "Food Drive Distribution", date: "2026-03-10", organization_name: "Helping Hands" },
-            { project_id: 3, name: "A neat service project", date: "2026-03-01", organization_name: "A great organization" }
-        ];
+        const query = `
+          SELECT p.*, o.name as organization_name 
+          FROM service_projects p 
+          JOIN organizations o ON p.organization_id = o.organization_id 
+          ORDER BY p.date DESC 
+          LIMIT 5
+        `;
+        const result = await db.query(query);
         
+        const viewsProjects = result.rows.map(proj => ({
+            project_id: proj.project_id,
+            name: proj.title, 
+            date: proj.date,
+            organization_name: proj.organization_name
+        }));
+
         res.render('projects', { 
-            title: 'Service Projects', 
-            projects: projectsMock 
+            title: 'Upcoming Service Projects', 
+            projects: viewsProjects 
         });
     } catch (error) {
         console.error("Error en getAllProjects controller: ", error);
@@ -26,18 +36,27 @@ export async function getProjectDetails(req, res, next) {
     try { 
         const projectId = req.params.id; 
         const projectRows = await getProjectById(projectId); 
-        const project = projectRows ? projectRows[0] : null; 
+        
+        // CORRECCIÓN: Extraemos el primer elemento [0] del arreglo
+        const rawProject = projectRows && projectRows.length > 0 ? projectRows[0] : null; 
 
-        if (!project) { 
-            const err = new Error('Proyecto no encontrado'); 
+        if (!rawProject) { 
+            const err = new Error('Service project not found'); 
             err.status = 404; 
             return next(err); 
         } 
 
+        const project = {
+            title: rawProject.title, 
+            description: rawProject.description,
+            location: rawProject.location,
+            organization_name: rawProject.organization_name
+        };
+
         const categories = await getCategoriesByProject(projectId); 
 
         res.render('project-detail', { 
-            title: project.title || "Project Detail", 
+            title: project.title, 
             project: project, 
             categories: categories || [] 
         }); 
