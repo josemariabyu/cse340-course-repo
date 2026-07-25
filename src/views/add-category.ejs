@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+
+<h2><%= title %></h2>
+
+<!-- Bloque dinámico para desplegar mensajes de error si la validación falla -->
+<% if (errors) { %>
+    <div class="error-messages" style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 1.5rem;">
+        <ul style="margin: 0; padding-left: 20px;">
+            <% errors.forEach(err => { %>
+                <li>⚠️ <%= err.msg %></li>
+            <% }) %>
+        </ul>
+    </div>
+<% } %>
+
+<form action="/categories/add" method="POST" style="background: #f8f9fa; padding: 20px; border-radius: 5px; max-width: 500px; margin-top: 1.5rem;">
+    <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="name" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Nombre de la Categoría:</label>
+        <input type="text" id="name" name="name" value="<%= oldData.name %>" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ej. Salud Comunitaria">
+    </div>
+    
+    <button type="submit" style="background: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+        Guardar Categoría
+    </button>
+</form>
+
+<div style="margin-top: 2rem;">
+    <a href="/categories" style="color: #6c757d; text-decoration: none;">← Cancelar y Volver</a>
+</div>
+
+<%- include('partials/footer') %>
