@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 // 2. Middleware para servir archivos estáticos (CSS e imágenes desde /public)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. Configurar EJS como el motor de plantillas de la aplicación (¡Ruta corregida dentro de src!)
+// 3. Configurar EJS como el motor de plantillas de la aplicación (¡Ruta dentro de src!)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src', 'views'));
 
@@ -32,12 +32,12 @@ app.get('/', (req, res) => {
   res.render('home', { title: 'Home' });
 });
 
-// Ruta para Organizaciones (Vista estática básica por ahora)
+// Ruta para Organizaciones (Vista estática básica)
 app.get('/organizations', (req, res) => {
   res.render('organizations', { title: 'Organizations' });
 });
 
-// MONTAJE DE NUESTRAS NUEVAS RUTAS (Delegadas a sus respectivos enrutadores)
+// MONTAJE DE NUESTRAS RUTAS (Delegadas a sus respectivos enrutadores)
 app.use('/categories', categoryRoutes);
 app.use('/category', categoryRoutes);
 
@@ -50,3 +50,4 @@ app.use('/project', projectRoutes);
 app.listen(port, () => {
   console.log(`Servidor backend corriendo en el puerto ${port}`);
 });
+
