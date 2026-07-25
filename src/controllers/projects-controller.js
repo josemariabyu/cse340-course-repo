@@ -37,7 +37,7 @@ export async function getProjectDetails(req, res, next) {
         const projectId = req.params.id; 
         const projectRows = await getProjectById(projectId); 
         
-        // CORRECCIÓN CRÍTICA: Extraemos la primera fila [0]
+        // CORRECCIÓN: Extraemos el primer elemento [0] del arreglo
         const rawProject = projectRows && projectRows.length > 0 ? projectRows[0] : null; 
 
         if (!rawProject) { 
@@ -66,4 +66,3 @@ export async function getProjectDetails(req, res, next) {
     } 
 }
 
-           
