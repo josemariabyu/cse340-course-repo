@@ -1,16 +1,19 @@
 <%- include('partials/header') %>
 
-<h2>Detalles del Proyecto: <%= project.title || "Service Project" %></h2>
+<h2>Detalles del Proyecto: <%= project.title %></h2>
 
 <div class="project-card-detail" style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-top: 1.5rem;">
-    <p><strong>Descripción:</strong> <%= project.description || "No description provided." %></p>
-    <p><strong>Ubicación:</strong> <%= project.location || "Community Center" %></p>
+    <p><strong>Descripción:</strong> <%= project.description || "Sin descripción disponible." %></p>
+    <p><strong>Ubicación:</strong> <%= project.location || "Centro Comunitario" %></p>
+    <p><strong>Organización:</strong> <%= project.organization_name || "Organización Asociada" %></p>
     
     <div class="tags" style="margin-top: 1rem;">
         <strong>Categorías vinculadas:</strong>
         <% if (categories && categories.length > 0) { %>
             <% categories.forEach(cat => { %>
-                <span style="background: #e2e3e5; padding: 3px 8px; border-radius: 3px; font-size: 0.9em; margin-right: 5px;"><%= cat.name %></span>
+                <a href="/category/<%= cat.category_id %>" style="background: #e2e3e5; color: #383d41; padding: 4px 10px; border-radius: 3px; font-size: 0.9em; margin-right: 5px; text-decoration: none;">
+                    🏷️ <%= cat.name %>
+                </a>
             <% }) %>
         <% } else { %>
             <span style="color: #6c757d; font-style: italic;">Ninguna categoría asignada</span>
