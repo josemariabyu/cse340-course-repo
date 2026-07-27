@@ -38,11 +38,15 @@ app.get('/organizations', (req, res) => {
 });
 
 // MONTAJE DE NUESTRAS RUTAS (Delegadas a sus respectivos enrutadores)
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use('/', categoryRoutes);      // atiende /new-category y /edit-category/:id
 app.use('/categories', categoryRoutes);
 app.use('/category', categoryRoutes);
+app.use('/projects', projectRoutes);
+app.use('/project', projectRoutes);
 
-app.use('/projects', projectRoutes); 
-app.use('/project', projectRoutes); 
 
 // ==========================================
 // 5. INICIAR EL SERVIDOR LOCAL

@@ -1,25 +1,36 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { getCategoryDetails, getCategoriesList, addCategoryForm, createCategory } from '../controllers/categories-controller.js';
+import {
+  getCategoryDetails,
+  getCategoriesList,
+  newCategoryForm,
+  createCategory,
+  editCategoryForm,
+  editCategory
+} from '../controllers/categories-controller.js';
 
 const router = express.Router();
 
-// Reglas estrictas de validación para proteger el sistema contra inyecciones y datos vacíos
+// Validación SERVER-SIDE (incluye min 3, que NO va en el cliente a propósito)
 const categoryValidationRules = [
   body('name')
     .trim()
-    .notEmpty().withMessage('El nombre de la categoría es obligatorio.')
-    .isLength({ min: 3 }).withMessage('El nombre debe tener al menos 3 caracteres.')
-    .escape() // Neutraliza ataques XSS escapando caracteres peligrosos
+    .notEmpty().withMessage('Category name is required.')
+    .isLength({ min: 3 }).withMessage('Category name must be at least 3 characters.')
+    .isLength({ max: 100 }).withMessage('Category name must be at most 100 characters.')
+    .escape()
 ];
 
-// Ruta GET para mostrar el formulario (Muestra la vista)
-router.get('/add', addCategoryForm);
-
-// Ruta POST para procesar el formulario (Aplica las validaciones antes de guardar)
-router.post('/add', categoryValidationRules, createCategory);
-
+// Listado y detalle
 router.get('/', getCategoriesList);
 router.get('/:id', getCategoryDetails);
+
+// W04 - CREATE
+router.get('/new-category', newCategoryForm);
+router.post('/new-category', categoryValidationRules, createCategory);
+
+// W04 - EDIT
+router.get('/edit-category/:id', editCategoryForm);
+router.post('/edit-category/:id', categoryValidationRules, editCategory);
 
 export default router;
