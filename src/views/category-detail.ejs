@@ -1,28 +1,40 @@
 <%- include('partials/header') %>
 
-<h2>Detalles del Proyecto: <%= project.title %></h2>
+<h2>Categoría: <%= category.name %></h2>
 
-<div class="project-card-detail" style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-top: 1.5rem;">
-    <p><strong>Descripción:</strong> <%= project.description || "Sin descripción disponible." %></p>
-    <p><strong>Ubicación:</strong> <%= project.location || "Centro Comunitario" %></p>
-    <p><strong>Organización:</strong> <%= project.organization_name || "Organización Asociada" %></p>
-    
-    <div class="tags" style="margin-top: 1rem;">
-        <strong>Categorías vinculadas:</strong>
-        <% if (categories && categories.length > 0) { %>
-            <% categories.forEach(cat => { %>
-                <a href="/category/<%= cat.category_id %>" style="background: #e2e3e5; color: #383d41; padding: 4px 10px; border-radius: 3px; font-size: 0.9em; margin-right: 5px; text-decoration: none;">
-                    🏷️ <%= cat.name %>
-                </a>
-            <% }) %>
-        <% } else { %>
-            <span style="color: #6c757d; font-style: italic;">Ninguna categoría asignada</span>
-        <% } %>
-    </div>
+<div class="project-card-detail" style="background:#f8f9fa; padding:20px; border-radius:5px; margin-top:1.5rem;">
+  <p><strong>ID:</strong> <%= category.category_id %></p>
+
+  <h3 style="margin-top:1.5rem;">Proyectos en esta categoría</h3>
+  <% if (projects && projects.length > 0) { %>
+    <ul style="line-height: 2;">
+      <% projects.forEach(p => { %>
+        <li>
+          <a href="/project/<%= p.project_id %>"
+             style="color:#28a745; font-weight:bold; text-decoration:none;">
+            <%= p.name %>
+          </a>
+          <small style="color:#6c757d;">
+            (<%= p.date ? new Date(p.date).toLocaleDateString() : 'Sin fecha' %>)
+          </small>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p style="color:#6c757d; font-style:italic;">
+      Todavía no hay proyectos asociados a esta categoría.
+    </p>
+  <% } %>
+
+  <div style="margin-top:1.5rem;">
+    <a href="/edit-category/<%= category.category_id %>"
+       style="color:#007bff;">✏️ Editar categoría</a>
+  </div>
 </div>
 
-<div style="margin-top: 2rem;">
-    <a href="/projects" style="color: #007bff; text-decoration: none;">← Volver a Proyectos</a>
+<div style="margin-top:2rem;">
+  <a href="/categories" style="color:#007bff; text-decoration:none;">← Volver a Categorías</a>
 </div>
 
 <%- include('partials/footer') %>
+

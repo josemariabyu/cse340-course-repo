@@ -11,7 +11,6 @@ import {
 
 const router = express.Router();
 
-// Validación SERVER-SIDE (incluye min 3, que NO va en el cliente a propósito)
 const categoryValidationRules = [
   body('name')
     .trim()
@@ -21,16 +20,19 @@ const categoryValidationRules = [
     .escape()
 ];
 
-// Listado y detalle
+// Listado
 router.get('/', getCategoriesList);
-router.get('/:id', getCategoryDetails);
 
-// W04 - CREATE
+// W04 - CREATE  (¡ANTES de /:id!)
 router.get('/new-category', newCategoryForm);
 router.post('/new-category', categoryValidationRules, createCategory);
 
-// W04 - EDIT
+// W04 - EDIT  (¡ANTES de /:id!)
 router.get('/edit-category/:id', editCategoryForm);
 router.post('/edit-category/:id', categoryValidationRules, editCategory);
 
+// Detalle (siempre AL FINAL, solo acepta números)
+router.get('/:id(\\d+)', getCategoryDetails);
+
 export default router;
+
