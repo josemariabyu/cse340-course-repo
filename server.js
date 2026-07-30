@@ -23,30 +23,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src', 'views'));
 
+
 // ==========================================
 // 4. RUTAS DE LA APLICACIÓN (Bajo patrón MVC)
 // ==========================================
 
-// Ruta para la página de Inicio (Home)
-app.get('/', (req, res) => {
-  res.render('home', { title: 'Home' });
-});
-
-// Ruta para Organizaciones (Vista estática básica)
-app.get('/organizations', (req, res) => {
-  res.render('organizations', { title: 'Organizations' });
-});
-
-// MONTAJE DE NUESTRAS RUTAS (Delegadas a sus respectivos enrutadores)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/', categoryRoutes);      // atiende /new-category y /edit-category/:id
-app.use('/categories', categoryRoutes);
-app.use('/category', categoryRoutes);
+// 1º Las rutas fijas de proyectos van primero
 app.use('/projects', projectRoutes);
-app.use('/project', projectRoutes);
 
+// 2º Las rutas de categorías van después
+app.use('/', categoryRoutes);
 
 // ==========================================
 // 5. INICIAR EL SERVIDOR LOCAL

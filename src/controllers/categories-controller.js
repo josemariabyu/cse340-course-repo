@@ -22,6 +22,12 @@ export async function getCategoriesList(req, res, next) {
 export async function getCategoryDetails(req, res, next) {
   try {
     const categoryId = req.params.id;
+
+    // 🛡️ CONTROL DE SEGURIDAD: Si el ID NO es un número válido, redirige al listado
+    if (isNaN(categoryId) || isNaN(parseInt(categoryId))) {
+      return res.redirect('/categories');
+    }
+
     const categoryRows = await getCategoryById(categoryId);
     const category = categoryRows && categoryRows.length > 0 ? categoryRows[0] : null;
 
@@ -32,20 +38,13 @@ export async function getCategoryDetails(req, res, next) {
     }
 
     const rawProjects = await getProjectsByCategory(categoryId);
-    const projects = rawProjects.map(p => ({
-      project_id: p.project_id,
-      name: p.title,
-      date: p.date
-    }));
+    const projects = rawProjects.map(p => ({ project_id: p.project_id, name: p.title, date: p.date }));
 
-    res.render('category-detail', {
-      title: category.name,
-      category,
-      projects: projects || []
-    });
-  } catch (error) { next(error); }
+    res.render('category-detail', { title: category.name, category, projects: projects || [] });
+  } catch (error) {
+    next(error);
+  }
 }
-
 // ---------- W04: CREATE ----------
 export function newCategoryForm(req, res) {
   res.render('new-category', {

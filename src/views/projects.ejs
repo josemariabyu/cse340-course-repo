@@ -3,12 +3,24 @@
 <h2><%= title %></h2>
 <p>Explora los proyectos de servicio activos en nuestra comunidad:</p>
 
-<ul class="projects-list" style="margin-top: 1.5rem; line-height: 2;">
+<!-- ➕ BOTÓN PARA CREAR NUEVO PROYECTO (Requerimiento de Adding) -->
+<div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+    <a href="/projects/new-project" class="btn" style="background-color: #28a745; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+        + New Project
+    </a>
+</div>
+
+<ul class="projects-list" style="margin-top: 1.5rem; line-height: 2; list-style: none; padding-left: 0;">
     <% projects.forEach(project => { %>
-        <li>
-            🚀 <a href="/project/<%= project.project_id %>" style="font-weight: bold; color: #007bff; text-decoration: none;"><%= project.name %></a> 
+        <li style="margin-bottom: 0.5rem;">
+            🚀 <a href="/projects/<%= project.project_id %>" style="font-weight: bold; color: #007bff; text-decoration: none;"><%= project.name %></a> 
             - 
-            <a href="/organizations" style="color: #28a745; text-decoration: none;"><%= project.organization_name %></a>
+            <span style="color: #28a745;"><%= project.organization_name %></span>
+            
+            <!-- ✏️ ENLACE PARA EDITAR EL PROYECTO (Requerimiento de Editing) -->
+            <a href="/projects/edit-project/<%= project.project_id %>" style="margin-left: 1rem; color: #dc3545; text-decoration: none; font-size: 0.9rem;">
+                📝 Edit
+            </a>
         </li>
     <% }) %>
 </ul>

@@ -32,7 +32,8 @@ router.get('/edit-category/:id', editCategoryForm);
 router.post('/edit-category/:id', categoryValidationRules, editCategory);
 
 // Detalle (siempre AL FINAL, solo acepta números)
-router.get('/:id(\\d+)', getCategoryDetails);
+
+router.get("/:id", getCategoryDetails);
 
 export default router;
 
