@@ -1,32 +1,21 @@
 <%- include('partials/header') %>
 
 <h2><%= title %></h2>
-<p>Explora los proyectos de servicio activos en nuestra comunidad:</p>
+<p>Explora los proyectos de servicio activos en nuestra comunidad.</p>
 
-<!-- ➕ BOTÓN PARA CREAR NUEVO PROYECTO (Requerimiento de Adding) -->
-<div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-    <a href="/projects/new-project" class="btn" style="background-color: #28a745; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
-        + New Project
-    </a>
-</div>
+<p><a class="btn btn-success" href="/new-project">+ New Project</a></p>
 
-<ul class="projects-list" style="margin-top: 1.5rem; line-height: 2; list-style: none; padding-left: 0;">
-    <% projects.forEach(project => { %>
-        <li style="margin-bottom: 0.5rem;">
-            🚀 <a href="/projects/<%= project.project_id %>" style="font-weight: bold; color: #007bff; text-decoration: none;"><%= project.name %></a> 
-            - 
-            <span style="color: #28a745;"><%= project.organization_name %></span>
-            
-            <!-- ✏️ ENLACE PARA EDITAR EL PROYECTO (Requerimiento de Editing) -->
-            <a href="/projects/edit-project/<%= project.project_id %>" style="margin-left: 1rem; color: #dc3545; text-decoration: none; font-size: 0.9rem;">
-                📝 Edit
-            </a>
-        </li>
-    <% }) %>
+<ul class="data-list">
+  <% projects.forEach(project => { %>
+    <li>
+      <a class="item-name" href="/project/<%= project.project_id %>"><%= project.name %></a>
+      <span class="item-meta"><%= project.organization_name %></span>
+      <a class="btn-link" href="/edit-project/<%= project.project_id %>">Edit</a>
+    </li>
+  <% }) %>
 </ul>
 
-<div style="margin-top: 2rem;">
-    <a href="/" style="color: #6c757d; text-decoration: none;">← Volver al Inicio</a>
-</div>
+<p><a class="btn-link" href="/">&larr; Volver al Inicio</a></p>
 
 <%- include('partials/footer') %>
+

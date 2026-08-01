@@ -1,162 +1,135 @@
-import { getProjectById } from '../models/projects.js'; 
-import { getCategoriesByProject } from '../models/categories.js'; 
-import db from '../config/db-connect.js'; 
+import { validationResult } from 'express-validator';
+import {
+  getAllProjects as getAllProjectsModel,
+  getProjectById,
+  insertProject,
+  updateProject
+} from '../models/projects.js';
+import { getCategoriesByProject } from '../models/categories.js';
+import { getAllOrganizations } from '../models/organizations.js';
 
-// 1. Mostrar la lista de los próximos 5 proyectos de servicio (/projects) 
-export async function getAllProjects(req, res, next) { 
-    try { 
-        const query = ` 
-            SELECT p.*, o.name as organization_name 
-            FROM service_projects p 
-            JOIN organizations o ON p.organization_id = o.organization_id 
-            ORDER BY p.date DESC 
-            LIMIT 5 
-        `; 
-        const result = await db.query(query); 
-        const viewsProjects = result.rows.map(proj => ({ 
-            project_id: proj.project_id, 
-            name: proj.title, 
-            date: proj.date, 
-            organization_name: proj.organization_name 
-        })); 
-        res.render('projects', { title: 'Upcoming Service Projects', projects: viewsProjects }); 
-    } catch (error) { 
-        console.error("Error en getAllProjects controller: ", error); 
-        next(error); 
-    } 
-} 
+// Listado de proyectos
+export async function getAllProjects(req, res, next) {
+  try {
+    const rows = await getAllProjectsModel();
+    const projects = rows.map(p => ({
+      project_id: p.project_id,
+      name: p.title,
+      date: p.date,
+      organization_name: p.organization_name
+    }));
+    res.render('projects', { title: 'Upcoming Service Projects', projects });
+  } catch (error) {
+    next(error);
+  }
+}
 
-// 2. Mostrar la página de detalle de un proyecto específico (/project/:id) 
-export async function getProjectDetails(req, res, next) { 
-    try { 
-        const projectId = req.params.id; 
+// Detalle de proyecto
+export async function getProjectDetails(req, res, next) {
+  try {
+    const projectId = req.params.id;
+    if (isNaN(parseInt(projectId, 10))) {
+      const err = new Error('Service project not found');
+      err.status = 404;
+      return next(err);
+    }
 
-        // 🛡️ ESCUDO DE SEGURIDAD: Si el ID NO es un número válido (ej. "new-project"), 
-        // pasamos al siguiente manejador de rutas para que no rompa la base de datos relacional.
-        if (isNaN(projectId) || isNaN(parseInt(projectId))) {
-            return next(); 
-        }
-        const projectRows = await getProjectById(projectId); 
-        const rawProject = projectRows && projectRows.length > 0 ? projectRows[0] : null; 
+    const rows = await getProjectById(projectId);
+    const rawProject = rows.length > 0 ? rows[0] : null;
+    if (!rawProject) {
+      const err = new Error('Service project not found');
+      err.status = 404;
+      return next(err);
+    }
 
-        if (!rawProject) { 
-            const err = new Error('Service project not found'); 
-            err.status = 404; 
-            return next(err); 
-        } 
+    const project = {
+      project_id: rawProject.project_id,
+      title: rawProject.title,
+      description: rawProject.description,
+      location: rawProject.location,
+      organization_name: rawProject.organization_name
+    };
 
-        const project = { 
-            title: rawProject.title, 
-            description: rawProject.description, 
-            location: rawProject.location, 
-            organization_name: rawProject.organization_name 
-        }; 
+    const categories = await getCategoriesByProject(projectId);
+    res.render('project-detail', { title: project.title, project, categories: categories || [] });
+  } catch (error) {
+    next(error);
+  }
+}
 
-        const categories = await getCategoriesByProject(projectId); 
-        res.render('project-detail', { title: project.title, project: project, categories: categories || [] }); 
-    } catch (error) { 
-        console.error("Error en getProjectDetails controller: ", error); 
-        next(error); 
-    } 
-} 
+// ---------- CREATE ----------
+export async function newProjectForm(req, res, next) {
+  try {
+    const organizations = await getAllOrganizations();
+    res.render('new-project', {
+      title: 'New Service Project',
+      errors: null,
+      organizations,
+      oldData: { title: '', description: '', location: '', organization_id: '' }
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
-// ========================================== 
-// ➕ ---------- W04: CREATE ---------- 
-// ========================================== 
+export async function createProject(req, res, next) {
+  const errors = validationResult(req);
+  try {
+    if (!errors.isEmpty()) {
+      const organizations = await getAllOrganizations();
+      return res.status(400).render('new-project', {
+        title: 'New Service Project',
+        errors: errors.array(),
+        organizations,
+        oldData: req.body
+      });
+    }
+    const { title, description, location, organization_id } = req.body;
+    await insertProject(title, description, location, organization_id);
+    res.redirect('/projects');
+  } catch (error) {
+    next(error);
+  }
+}
 
-// Mostrar el formulario para crear un nuevo proyecto 
-export async function newProjectForm(req, res, next) { 
-    try { 
-        // Traemos las organizaciones para cargarlas en un <select> del formulario 
-        const orgsResult = await db.query('SELECT organization_id, name FROM organizations ORDER BY name ASC'); 
-        res.render('new-project', { 
-            title: 'New Service Project', 
-            errors: null, 
-            organizations: orgsResult.rows, 
-            oldData: { title: '', description: '', location: '', organization_id: '' } 
-        }); 
-    } catch (error) { 
-        next(error); 
-    } 
-} 
+// ---------- EDIT ----------
+export async function editProjectForm(req, res, next) {
+  try {
+    const rows = await getProjectById(req.params.id);
+    const project = rows.length > 0 ? rows[0] : null;
+    if (!project) {
+      const err = new Error('Project not found');
+      err.status = 404;
+      return next(err);
+    }
+    const organizations = await getAllOrganizations();
+    res.render('edit-project', {
+      title: 'Edit Service Project',
+      errors: null,
+      project,
+      organizations
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
-// Procesar el envío del formulario de creación 
-export async function createProject(req, res, next) { 
-    const { title, description, location, organization_id } = req.body; 
-    try { 
-        // En caso de error de validación, volvemos a renderizar el formulario con las orgs 
-        const orgsResult = await db.query('SELECT organization_id, name FROM organizations ORDER BY name ASC'); 
-        
-        // Si hay campos vacíos básicos (control rápido manual complementario) 
-        if (!title || !description || !organization_id) { 
-            return res.render('new-project', { 
-                title: 'New Service Project', 
-                errors: [{ msg: 'Title, description and organization are required.' }], 
-                organizations: orgsResult.rows, 
-                oldData: req.body 
-            }); 
-        } 
-
-        const query = ` 
-            INSERT INTO service_projects (title, description, location, organization_id, date) 
-            VALUES ($1, $2, $3, $4, NOW()) 
-            RETURNING * 
-        `; 
-        await db.query(query, [title, description, location || '', organization_id]); 
-        res.redirect('/projects'); 
-    } catch (error) { 
-        next(error); 
-    } 
-} 
-
-// ========================================== 
-// ✏️ ---------- W04: EDIT ---------- 
-// ========================================== 
-
-// Mostrar el formulario para editar un proyecto existente 
-export async function editProjectForm(req, res, next) { 
-    const projectId = req.params.id; 
-    try { 
-        const projectResult = await db.query('SELECT * FROM service_projects WHERE project_id = $1', [projectId]); 
-        const project = projectResult.rows && projectResult.rows.length > 0 ? projectResult.rows[0] : null; 
-
-        if (!project) { 
-            const err = new Error('Project not found'); 
-            err.status = 404; 
-            return next(err); 
-        } 
-
-        const orgsResult = await db.query('SELECT organization_id, name FROM organizations ORDER BY name ASC'); 
-        res.render('edit-project', { 
-            title: 'Edit Service Project', 
-            errors: null, 
-            project, 
-            organizations: orgsResult.rows 
-        }); 
-    } catch (error) { 
-        next(error); 
-    } 
-} 
-
-// Procesar la actualización del proyecto 
-export async function editProject(req, res, next) { 
-    const projectId = req.params.id; 
-    const { title, description, location, organization_id } = req.body; 
-    try { 
-        const query = ` 
-            UPDATE service_projects 
-            SET title = $1, description = $2, location = $3, organization_id = $4 
-            WHERE project_id = $5 
-        `; 
-        await db.query(query, [title, description, location || '', organization_id, projectId]); 
-        res.redirect('/projects'); 
-    } catch (error) { 
-        const orgsResult = await db.query('SELECT organization_id, name FROM organizations ORDER BY name ASC'); 
-        res.render('edit-project', { 
-            title: 'Edit Service Project', 
-            errors: [{ msg: 'Failed to update project. Please verify inputs.' }], 
-            project: { project_id: projectId, title, description, location, organization_id }, 
-            organizations: orgsResult.rows 
-        }); 
-    } 
+export async function editProject(req, res, next) {
+  const errors = validationResult(req);
+  const { title, description, location, organization_id } = req.body;
+  try {
+    if (!errors.isEmpty()) {
+      const organizations = await getAllOrganizations();
+      return res.status(400).render('edit-project', {
+        title: 'Edit Service Project',
+        errors: errors.array(),
+        project: { project_id: req.params.id, title, description, location, organization_id },
+        organizations
+      });
+    }
+    await updateProject(req.params.id, title, description, location, organization_id);
+    res.redirect('/projects');
+  } catch (error) {
+    next(error);
+  }
 }

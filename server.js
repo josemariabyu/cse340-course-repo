@@ -1,46 +1,54 @@
-// 1. Importaciones de módulos y rutas (requisito del curso)
+// server.js
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import categoryRoutes from './src/routes/categories-routes.js';
-import projectRoutes from './src/routes/projects-routes.js';
 
-// Configurar variables de entorno desde el archivo .env
+import staticRoutes from './src/routes/static-routes.js';
+import organizationRoutes from './src/routes/organizations-routes.js';
+import projectRoutes from './src/routes/projects-routes.js';
+import categoryRoutes from './src/routes/categories-routes.js';
+
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configurar rutas para archivos estáticos (para que funcionen ES Modules)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 2. Middleware para servir archivos estáticos (CSS e imágenes desde /public)
+// Middleware
 app.use(express.static(path.join(__dirname, 'public')));
-
-// 3. Configurar EJS como el motor de plantillas de la aplicación (¡Ruta dentro de src!)
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src', 'views'));
-
-
-// ==========================================
-// 4. RUTAS DE LA APLICACIÓN (Bajo patrón MVC)
-// ==========================================
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 1º Las rutas fijas de proyectos van primero
-app.use('/projects', projectRoutes);
+// Motor de vistas
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src', 'views'));
 
-// 2º Las rutas de categorías van después
+// Rutas (todas definidas en sus propios archivos de routes)
+app.use('/', staticRoutes);
+app.use('/', organizationRoutes);
+app.use('/', projectRoutes);
 app.use('/', categoryRoutes);
 
-// ==========================================
-// 5. INICIAR EL SERVIDOR LOCAL
-// ==========================================
+// 404
+app.use((req, res) => {
+  res.status(404).render('error', {
+    title: 'Page Not Found',
+    message: 'Sorry, the page you are looking for does not exist.'
+  });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).render('error', {
+    title: 'Server Error',
+    message: err.message || 'Something went wrong.'
+  });
+});
+
 app.listen(port, () => {
   console.log(`Servidor backend corriendo en el puerto ${port}`);
 });
-

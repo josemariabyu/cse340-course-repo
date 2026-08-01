@@ -12,25 +12,26 @@ export async function getCategoriesList(req, res, next) {
   try {
     const categories = await getAllCategories();
     res.render('categories', {
-      title: 'Categories & Organizations',
+      title: 'Categories',
       categories: categories || []
     });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 }
 
-// Detalle de categoría
+// Detalle de categoría (W03)
 export async function getCategoryDetails(req, res, next) {
   try {
     const categoryId = req.params.id;
-
-    // 🛡️ CONTROL DE SEGURIDAD: Si el ID NO es un número válido, redirige al listado
-    if (isNaN(categoryId) || isNaN(parseInt(categoryId))) {
-      return res.redirect('/categories');
+    if (isNaN(parseInt(categoryId, 10))) {
+      const err = new Error('Category not found');
+      err.status = 404;
+      return next(err);
     }
 
-    const categoryRows = await getCategoryById(categoryId);
-    const category = categoryRows && categoryRows.length > 0 ? categoryRows[0] : null;
-
+    const rows = await getCategoryById(categoryId);
+    const category = rows.length > 0 ? rows[0] : null;
     if (!category) {
       const err = new Error('Category not found');
       err.status = 404;
@@ -38,13 +39,18 @@ export async function getCategoryDetails(req, res, next) {
     }
 
     const rawProjects = await getProjectsByCategory(categoryId);
-    const projects = rawProjects.map(p => ({ project_id: p.project_id, name: p.title, date: p.date }));
+    const projects = rawProjects.map(p => ({
+      project_id: p.project_id,
+      name: p.title,
+      date: p.date
+    }));
 
-    res.render('category-detail', { title: category.name, category, projects: projects || [] });
+    res.render('category-detail', { title: category.name, category, projects });
   } catch (error) {
     next(error);
   }
 }
+
 // ---------- W04: CREATE ----------
 export function newCategoryForm(req, res) {
   res.render('new-category', {
@@ -66,14 +72,16 @@ export async function createCategory(req, res, next) {
   try {
     await insertCategory(req.body.name);
     res.redirect('/categories');
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 }
 
 // ---------- W04: EDIT ----------
 export async function editCategoryForm(req, res, next) {
   try {
     const rows = await getCategoryById(req.params.id);
-    const category = rows && rows.length > 0 ? rows[0] : null;
+    const category = rows.length > 0 ? rows[0] : null;
     if (!category) {
       const err = new Error('Category not found');
       err.status = 404;
@@ -84,7 +92,9 @@ export async function editCategoryForm(req, res, next) {
       errors: null,
       category
     });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function editCategory(req, res, next) {
@@ -99,5 +109,8 @@ export async function editCategory(req, res, next) {
   try {
     await updateCategory(req.params.id, req.body.name);
     res.redirect('/categories');
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 }
+

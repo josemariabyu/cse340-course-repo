@@ -1,6 +1,6 @@
 <%- include('partials/header') %>
 
-<h2>New Category</h2>
+<h2>New Organization</h2>
 
 <% if (errors && errors.length) { %>
   <ul class="form-errors" role="alert">
@@ -8,15 +8,14 @@
   </ul>
 <% } %>
 
-<form action="/new-category" method="POST" class="app-form">
-  <label for="name">Category name</label>
-  <input type="text" id="name" name="name" required maxlength="100"
+<form action="/new-organization" method="POST" class="app-form">
+  <label for="name">Organization name</label>
+  <input type="text" id="name" name="name" required maxlength="150"
          value="<%= oldData && oldData.name ? oldData.name : '' %>">
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Create category</button>
-    <a class="btn-link" href="/categories">Cancel</a>
+    <button type="submit" class="btn btn-primary">Create organization</button>
+    <a class="btn-link" href="/organizations">Cancel</a>
   </div>
 </form>
 
 <%- include('partials/footer') %>
-

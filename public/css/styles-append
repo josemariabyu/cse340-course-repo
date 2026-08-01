@@ -1,0 +1,108 @@
+/* ===== W04: estilos de formularios, listas y botones (pegar al FINAL de styles.css) ===== */
+
+.app-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 520px;
+  margin-top: 1.5rem;
+}
+
+.app-form label {
+  font-weight: 600;
+  color: #1a365d;
+}
+
+.app-form input,
+.app-form select,
+.app-form textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #1f2937;
+  background: #fff;
+}
+
+.app-form input:focus,
+.app-form select:focus,
+.app-form textarea:focus,
+a:focus,
+button:focus {
+  outline: 3px solid #1a365d;
+  outline-offset: 2px;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary { background-color: #1a365d; color: #fff; }
+.btn-success { background-color: #1b6b32; color: #fff; }
+.btn:hover { opacity: 0.9; }
+
+.btn-link {
+  color: #1c4f8a;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.form-errors {
+  background: #fdecea;
+  border: 1px solid #a4131b;
+  color: #8a1119;
+  border-radius: 4px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 1rem;
+}
+
+.data-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.data-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.data-list .item-name {
+  font-weight: 700;
+  color: #1c4f8a;
+}
+
+.data-list .item-meta {
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.navigation-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+
+.image-container { text-align: center; margin-top: 1.5rem; }
+.image-container img { max-width: 100%; height: auto; }

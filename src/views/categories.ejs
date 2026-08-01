@@ -1,33 +1,19 @@
 <%- include('partials/header') %>
 
-<h2><%= title %></h2>
-<p>Selecciona una categoría para explorar sus proyectos de servicio vinculados:</p>
+<h2>Categories</h2>
+<p>Selecciona una categoría para explorar sus proyectos de servicio vinculados.</p>
 
-<div style="margin: 1rem 0;">
-  <a class="btn" href="/new-category"
-     style="display:inline-block; background:#28a745; color:#fff; padding:8px 14px; border-radius:4px; text-decoration:none;">
-    + New Category
-  </a>
-</div>
+<p><a class="btn btn-success" href="/new-category">+ New Category</a></p>
 
-<ul class="categories-list" style="margin-top: 1.5rem; line-height: 2.5; font-size: 1.1em;">
+<ul class="data-list">
   <% categories.forEach(cat => { %>
     <li>
-      📁 <a href="/category/<%= cat.category_id %>"
-            style="font-weight: bold; color: #28a745; text-decoration: none;">
-        <%= cat.name %>
-      </a>
-      &nbsp;
-      <a href="/edit-category/<%= cat.category_id %>"
-         style="font-size: 0.9em; color:#007bff;">✏️ Edit</a>
+      <a class="item-name" href="/category/<%= cat.category_id %>"><%= cat.name %></a>
+      <a class="btn-link" href="/edit-category/<%= cat.category_id %>">Edit</a>
     </li>
   <% }) %>
 </ul>
 
-<div style="margin-top: 2.5rem;">
-  <a href="/" style="color: #007bff; text-decoration: none;">← Volver al Inicio</a>
-</div>
+<p><a class="btn-link" href="/">&larr; Volver al Inicio</a></p>
 
 <%- include('partials/footer') %>
-
-
