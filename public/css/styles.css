@@ -117,3 +117,38 @@ footer {
   header h1 { font-size: 1.5rem; }
   ul.data-list li .btn-link { margin-left: 0; }
 }
+
+/* ================= W05: AUTENTICACIÓN ================= */
+.flash {
+  padding: .85rem 1rem; border-radius: 6px; margin-bottom: 1.5rem;
+  font-weight: 600; border-left: 4px solid;
+}
+.flash-success { background: #f0fff4; border-color: #28a745; color: #22543d; }
+.flash-error   { background: #fff5f5; border-color: #dc3545; color: #9b2c2c; }
+
+.form-errors {
+  list-style: none; padding: 1rem 1.2rem; margin-bottom: 1.5rem;
+  background: #fff5f5; border: 1px solid #feb2b2; border-left: 4px solid #dc3545;
+  color: #9b2c2c; border-radius: 6px;
+}
+.form-errors li { margin-bottom: .25rem; }
+
+input[type="email"], input[type="password"] {
+  width: 100%; padding: .6rem .75rem; margin-bottom: 1rem; font-size: 1rem;
+  border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;
+  font-family: inherit; background: #fff;
+}
+input[type="email"]:focus, input[type="password"]:focus {
+  outline: none; border-color: #2b6cb0; box-shadow: 0 0 0 3px rgba(43,108,176,.15);
+}
+
+.data-table {
+  width: 100%; border-collapse: collapse; margin-top: 1.5rem;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden;
+}
+.data-table th {
+  text-align: left; background: #2b6cb0; color: #fff;
+  padding: .8rem 1rem; font-size: .9rem; letter-spacing: .02em;
+}
+.data-table td { padding: .8rem 1rem; border-top: 1px solid #e2e8f0; }
+.data-table tbody tr:nth-child(even) { background: #f8fafc; }

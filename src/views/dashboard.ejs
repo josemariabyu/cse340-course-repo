@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+
+<h2>Dashboard</h2>
+<p>Hola <strong><%= user.name %></strong>, entraste como
+  <span class="tag"><%= user.role %></span>
+</p>
+
+<ul class="data-list">
+  <li>
+    <span class="item-name">Mi cuenta</span>
+    <span class="item-meta"><%= user.email %></span>
+  </li>
+
+  <% if (isAdmin) { %>
+    <li>
+      <a class="item-name" href="/users">Registered Users</a>
+      <span class="item-meta">Admin only</span>
+      <a class="btn-link" href="/users">View</a>
+    </li>
+  <% } %>
+
+  <li>
+    <a class="item-name" href="/categories">Categories</a>
+    <a class="btn-link" href="/categories">View</a>
+  </li>
+  <li>
+    <a class="item-name" href="/projects">Service Projects</a>
+    <a class="btn-link" href="/projects">View</a>
+  </li>
+  <li>
+    <a class="item-name" href="/organizations">Organizations</a>
+    <a class="btn-link" href="/organizations">View</a>
+  </li>
+</ul>
+
+<p><a class="btn-link" href="/logout">Log out</a></p>
+
+<%- include('partials/footer') %>

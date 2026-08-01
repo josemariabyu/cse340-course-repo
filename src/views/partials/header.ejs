@@ -15,7 +15,21 @@
                 <li><a href="/organizations">Organizaciones</a></li>
                 <li><a href="/projects">Proyectos</a></li>
                 <li><a href="/categories">Categorías</a></li>
+
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <% if (typeof isAdmin !== 'undefined' && isAdmin) { %>
+                        <li><a href="/users">Users</a></li>
+                    <% } %>
+                    <li><a href="/logout">Logout (<%= user.name %>)</a></li>
+                <% } else { %>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                <% } %>
             </ul>
         </nav>
     </header>
     <main>
+    <% if (typeof message !== 'undefined' && message) { %>
+      <p class="flash flash-<%= message.type %>" role="status"><%= message.text %></p>
+    <% } %>

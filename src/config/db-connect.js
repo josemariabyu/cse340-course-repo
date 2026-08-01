@@ -18,6 +18,20 @@ const db = new Pool({
 // SCRIPT AUTOMÁTICO: Crea las tablas y mete los datos si no existen al arrancar el servidor
 const initDb = async () => {
   const sql = `
+
+    CREATE TABLE IF NOT EXISTS public.users (
+        user_id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(150) NOT NULL UNIQUE,
+        password_hash VARCHAR(255) NOT NULL,
+        role VARCHAR(20) NOT NULL DEFAULT 'user'
+    );
+
+    -- Cuenta de prueba para el grader (password: cse340!)
+    INSERT INTO public.users (name, email, password_hash, role) VALUES
+    ('Admin Account', 'admin@example.com', '$2b$10$R2JMeFUL6DBBGvKHTIP05uYCnk8GKYmYqdXDljSinJ6v/9ZofyEoG', 'admin')
+    ON CONFLICT (email) DO UPDATE SET role = 'admin';
+
     CREATE TABLE IF NOT EXISTS public.organizations (
         organization_id SERIAL PRIMARY KEY,
         name VARCHAR(150) NOT NULL UNIQUE
@@ -82,4 +96,3 @@ const initDb = async () => {
 initDb();
 
 export default db;
-

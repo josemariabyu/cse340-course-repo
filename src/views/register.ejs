@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+
+<h2>Register</h2>
+<p>Creá tu cuenta para participar en los proyectos de servicio.</p>
+
+<% if (errors && errors.length) { %>
+  <ul class="form-errors" role="alert">
+    <% errors.forEach(e => { %><li><%= e.msg %></li><% }) %>
+  </ul>
+<% } %>
+
+<form action="/register" method="POST" class="app-form">
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name" required maxlength="100"
+         value="<%= oldData && oldData.name ? oldData.name : '' %>">
+
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required maxlength="150"
+         autocomplete="username"
+         value="<%= oldData && oldData.email ? oldData.email : '' %>">
+
+  <label for="password">Password</label>
+  <input type="password" id="password" name="password" required
+         autocomplete="new-password">
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Create account</button>
+    <a class="btn-link" href="/login">I already have an account</a>
+  </div>
+</form>
+
+<%- include('partials/footer') %>
