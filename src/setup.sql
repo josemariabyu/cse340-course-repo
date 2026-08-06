@@ -97,7 +97,3 @@ CREATE TABLE IF NOT EXISTS users (
     role VARCHAR(20) NOT NULL DEFAULT 'user'
 );
 
--- admin@example.com / cse340!  (hash bcrypt)
-INSERT INTO users (name, email, password_hash, role) VALUES
-('Admin Account', 'admin@example.com', '$2b$10$R2JMeFUL6DBBGvKHTIP05uYCnk8GKYmYqdXDljSinJ6v/9ZofyEoG', 'admin')
-ON CONFLICT (email) DO UPDATE SET role = 'admin';
