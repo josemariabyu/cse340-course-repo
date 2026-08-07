@@ -8,10 +8,10 @@ import {
   editCategoryForm,
   editCategory
 } from '../controllers/categories-controller.js';
+import { requireLogin, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Validación del lado del servidor: requerida, min 3, max 100
 const categoryValidationRules = [
   body('name')
     .trim()
@@ -20,19 +20,16 @@ const categoryValidationRules = [
     .isLength({ max: 100 }).withMessage('Category name must be 100 characters or less.')
 ];
 
-// Listado de categorías
+// Listado y detalle (público)
 router.get('/categories', getCategoriesList);
-
-// W04 - CREATE
-router.get('/new-category', newCategoryForm);
-router.post('/new-category', categoryValidationRules, createCategory);
-
-// W04 - EDIT
-router.get('/edit-category/:id', editCategoryForm);
-router.post('/edit-category/:id', categoryValidationRules, editCategory);
-
-// W03 - Detalle de categoría
 router.get('/category/:id', getCategoryDetails);
 
-export default router;
+// CREATE (solo admin)
+router.get('/new-category', requireLogin, requireRole('admin'), newCategoryForm);
+router.post('/new-category', requireLogin, requireRole('admin'), categoryValidationRules, createCategory);
 
+// EDIT (solo admin)
+router.get('/edit-category/:id', requireLogin, requireRole('admin'), editCategoryForm);
+router.post('/edit-category/:id', requireLogin, requireRole('admin'), categoryValidationRules, editCategory);
+
+export default router;

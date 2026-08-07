@@ -129,3 +129,4 @@ export async function usersList(req, res, next) {
     next(error);
   }
 }
+export { requireLogin, requireRole } from '../middleware/auth.js';

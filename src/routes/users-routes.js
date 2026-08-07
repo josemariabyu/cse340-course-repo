@@ -8,7 +8,7 @@ import {
   logout,
   dashboard,
   usersList
-} from '../controllers/account-controller.js';
+} from '../controllers/users.js';
 import { requireLogin, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();

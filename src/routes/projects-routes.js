@@ -8,6 +8,7 @@ import {
   editProjectForm,
   editProject
 } from '../controllers/projects-controller.js';
+import { requireLogin, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -30,18 +31,16 @@ const projectValidationRules = [
     .isInt().withMessage('Organization is not valid.')
 ];
 
-// Listado
+// Listado y detalle (público)
 router.get('/projects', getAllProjects);
-
-// CREATE
-router.get('/new-project', newProjectForm);
-router.post('/new-project', projectValidationRules, createProject);
-
-// EDIT
-router.get('/edit-project/:id', editProjectForm);
-router.post('/edit-project/:id', projectValidationRules, editProject);
-
-// Detalle
 router.get('/project/:id', getProjectDetails);
+
+// CREATE (solo admin)
+router.get('/new-project', requireLogin, requireRole('admin'), newProjectForm);
+router.post('/new-project', requireLogin, requireRole('admin'), projectValidationRules, createProject);
+
+// EDIT (solo admin)
+router.get('/edit-project/:id', requireLogin, requireRole('admin'), editProjectForm);
+router.post('/edit-project/:id', requireLogin, requireRole('admin'), projectValidationRules, editProject);
 
 export default router;

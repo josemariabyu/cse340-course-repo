@@ -7,6 +7,7 @@ import {
   editOrganizationForm,
   editOrganization
 } from '../controllers/organizations-controller.js';
+import { requireLogin, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -18,15 +19,15 @@ const organizationValidationRules = [
     .isLength({ max: 150 }).withMessage('Organization name must be 150 characters or less.')
 ];
 
-// Listado
+// Listado (público)
 router.get('/organizations', getOrganizationsList);
 
-// CREATE
-router.get('/new-organization', newOrganizationForm);
-router.post('/new-organization', organizationValidationRules, createOrganization);
+// CREATE (solo admin)
+router.get('/new-organization', requireLogin, requireRole('admin'), newOrganizationForm);
+router.post('/new-organization', requireLogin, requireRole('admin'), organizationValidationRules, createOrganization);
 
-// EDIT
-router.get('/edit-organization/:id', editOrganizationForm);
-router.post('/edit-organization/:id', organizationValidationRules, editOrganization);
+// EDIT (solo admin)
+router.get('/edit-organization/:id', requireLogin, requireRole('admin'), editOrganizationForm);
+router.post('/edit-organization/:id', requireLogin, requireRole('admin'), organizationValidationRules, editOrganization);
 
 export default router;

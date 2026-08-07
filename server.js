@@ -9,7 +9,7 @@ import staticRoutes from './src/routes/static-routes.js';
 import organizationRoutes from './src/routes/organizations-routes.js';
 import projectRoutes from './src/routes/projects-routes.js';
 import categoryRoutes from './src/routes/categories-routes.js';
-import accountRoutes from './src/routes/account-routes.js';
+import usersRoutes from './src/routes/users-routes.js';
 import { setLocals } from './src/middleware/auth.js';
 
 dotenv.config();
@@ -48,7 +48,7 @@ app.set('views', path.join(__dirname, 'src', 'views'));
 
 // Rutas (todas definidas en sus propios archivos de routes)
 app.use('/', staticRoutes);
-app.use('/', accountRoutes);
+app.use('/', usersRoutes);
 app.use('/', organizationRoutes);
 app.use('/', projectRoutes);
 app.use('/', categoryRoutes);
