@@ -20,7 +20,26 @@
         <% } %>
     </div>
 </div>
-
+<div class="volunteer-section" style="margin-top: 1.5rem;">
+    <% if (typeof user !== 'undefined' && user) { %>
+        <% if (isUserVolunteering) { %>
+            <p style="color: #155724; background: #d4edda; padding: 10px; border-radius: 5px;">
+                ✅ You are volunteering for this project.
+            </p>
+            <form action="/project/<%= project.project_id %>/unvolunteer" method="POST">
+                <button type="submit" class="btn-link" style="background:none; border:none; color:#dc3545; cursor:pointer; padding:0;">
+                    Remove myself as a volunteer
+                </button>
+            </form>
+        <% } else { %>
+            <form action="/project/<%= project.project_id %>/volunteer" method="POST">
+                <button type="submit" class="btn btn-primary">
+                    Volunteer for this project
+                </button>
+            </form>
+        <% } %>
+    <% } %>
+</div>
 <div style="margin-top: 2rem;">
     <a href="/projects" style="color: #007bff; text-decoration: none;">← Volver a Proyectos</a>
 </div>

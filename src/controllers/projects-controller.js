@@ -7,6 +7,7 @@ import {
 } from '../models/projects.js';
 import { getCategoriesByProject } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
+import { addVolunteer, removeVolunteer, isVolunteering } from '../models/volunteers.js';
 
 // Listado de proyectos
 export async function getAllProjects(req, res, next) {
@@ -51,7 +52,19 @@ export async function getProjectDetails(req, res, next) {
     };
 
     const categories = await getCategoriesByProject(projectId);
-    res.render('project-detail', { title: project.title, project, categories: categories || [] });
+
+    // W06: chequear si el usuario logueado ya es voluntario de este proyecto
+    let isUserVolunteering = false;
+    if (req.session && req.session.user) {
+      isUserVolunteering = await isVolunteering(req.session.user.user_id, projectId);
+    }
+
+    res.render('project-detail', {
+      title: project.title,
+      project,
+      categories: categories || [],
+      isUserVolunteering
+    });
   } catch (error) {
     next(error);
   }
@@ -129,6 +142,43 @@ export async function editProject(req, res, next) {
     }
     await updateProject(req.params.id, title, description, location, organization_id);
     res.redirect('/projects');
+  } catch (error) {
+    next(error);
+  }
+}
+// ---------- VOLUNTEER (W06) ----------
+export async function volunteerForProject(req, res, next) {
+  try {
+    const projectId = req.params.id;
+    const userId = req.session.user.user_id;
+
+    await addVolunteer(userId, projectId);
+
+    req.session.message = {
+      type: 'success',
+      text: 'You are now volunteering for this project!'
+    };
+    res.redirect(`/project/${projectId}`);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function unvolunteerFromProject(req, res, next) {
+  try {
+    const projectId = req.params.id;
+    const userId = req.session.user.user_id;
+
+    await removeVolunteer(userId, projectId);
+
+    req.session.message = {
+      type: 'success',
+      text: 'You have removed yourself as a volunteer.'
+    };
+
+    // Si viene desde el dashboard, volver ahí; si no, volver al detalle del proyecto
+    const redirectTo = req.body.redirectTo === 'dashboard' ? '/dashboard' : `/project/${projectId}`;
+    res.redirect(redirectTo);
   } catch (error) {
     next(error);
   }

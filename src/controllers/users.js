@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
+import { getVolunteeredProjectsByUser } from '../models/volunteers.js';
 import {
   getAllUsers,
   getUserByEmail,
@@ -116,8 +117,16 @@ export function logout(req, res) {
 }
 
 // ---------- DASHBOARD (requireLogin) ----------
-export function dashboard(req, res) {
-  res.render('dashboard', { title: 'Dashboard' });
+export async function dashboard(req, res, next) {
+  try {
+    const volunteeredProjects = await getVolunteeredProjectsByUser(req.session.user.user_id);
+    res.render('dashboard', {
+      title: 'Dashboard',
+      volunteeredProjects: volunteeredProjects || []
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 // ---------- USERS PAGE (requireRole('admin')) ----------

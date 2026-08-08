@@ -96,4 +96,15 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL DEFAULT 'user'
 );
-
+-- =======================================================
+-- W06: TABLA DE VOLUNTARIOS (Relación Muchos a Muchos)
+-- =======================================================
+CREATE TABLE IF NOT EXISTS volunteers (
+    user_id INT NOT NULL,
+    project_id INT NOT NULL,
+    PRIMARY KEY (user_id, project_id),
+    CONSTRAINT fk_volunteer_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_volunteer_project FOREIGN KEY (project_id)
+        REFERENCES service_projects(project_id) ON DELETE CASCADE
+);

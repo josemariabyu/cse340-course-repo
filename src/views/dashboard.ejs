@@ -32,7 +32,25 @@
     <a class="btn-link" href="/organizations">View</a>
   </li>
 </ul>
-
+<h3 style="margin-top: 2rem;">My Volunteer Projects</h3>
+<% if (volunteeredProjects && volunteeredProjects.length > 0) { %>
+  <ul class="data-list">
+    <% volunteeredProjects.forEach(p => { %>
+      <li>
+        <a class="item-name" href="/project/<%= p.project_id %>"><%= p.title %></a>
+        <span class="item-meta"><%= p.organization_name %> — <%= p.location %></span>
+        <form action="/project/<%= p.project_id %>/unvolunteer" method="POST" style="display:inline;">
+          <input type="hidden" name="redirectTo" value="dashboard">
+          <button type="submit" class="btn-link" style="background:none; border:none; color:#dc3545; cursor:pointer; padding:0;">
+            Remove
+          </button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+<% } else { %>
+  <p style="color: #6c757d; font-style: italic;">You haven't signed up to volunteer for any projects yet.</p>
+<% } %>
 <p><a class="btn-link" href="/logout">Log out</a></p>
 
 <%- include('partials/footer') %>

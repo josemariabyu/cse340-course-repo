@@ -6,7 +6,9 @@ import {
   newProjectForm,
   createProject,
   editProjectForm,
-  editProject
+  editProject,
+  volunteerForProject,
+  unvolunteerFromProject
 } from '../controllers/projects-controller.js';
 import { requireLogin, requireRole } from '../middleware/auth.js';
 
@@ -42,5 +44,9 @@ router.post('/new-project', requireLogin, requireRole('admin'), projectValidatio
 // EDIT (solo admin)
 router.get('/edit-project/:id', requireLogin, requireRole('admin'), editProjectForm);
 router.post('/edit-project/:id', requireLogin, requireRole('admin'), projectValidationRules, editProject);
+
+// W06: voluntariado (cualquier usuario logueado, no solo admin)
+router.post('/project/:id/volunteer', requireLogin, volunteerForProject);
+router.post('/project/:id/unvolunteer', requireLogin, unvolunteerFromProject);
 
 export default router;
