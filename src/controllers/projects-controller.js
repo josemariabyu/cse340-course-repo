@@ -3,11 +3,13 @@ import {
   getAllProjects as getAllProjectsModel,
   getProjectById,
   insertProject,
-  updateProject
+  updateProject,
+  addVolunteer,
+  removeVolunteer,
+  isVolunteering
 } from '../models/projects.js';
 import { getCategoriesByProject } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
-import { addVolunteer, removeVolunteer, isVolunteering } from '../models/volunteers.js';
 
 // Listado de proyectos
 export async function getAllProjects(req, res, next) {

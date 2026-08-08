@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
-import { getVolunteeredProjectsByUser } from '../models/volunteers.js';
+import { getVolunteeredProjectsByUser } from '../models/projects.js';
 import {
   getAllUsers,
   getUserByEmail,
