@@ -1,34 +1,34 @@
-import pg from 'pg';
-import dotenv from 'dotenv';
+  import pg from 'pg';
+  import dotenv from 'dotenv';
 
-dotenv.config();
+  dotenv.config();
 
-const { Pool } = pg;
-const isProduction = process.env.RENDER || process.env.NODE_ENV === 'production';
+  const { Pool } = pg;
+  const isProduction = process.env.RENDER || process.env.NODE_ENV === 'production';
 
-const db = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_DATABASE,
-  ssl: isProduction ? { rejectUnauthorized: false } : false
-});
+  const db = new Pool({
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_DATABASE,
+    ssl: isProduction ? { rejectUnauthorized: false } : false
+  });
 
-// SCRIPT AUTOMÁTICO: Crea las tablas y mete los datos si no existen al arrancar el servidor
-const initDb = async () => {
-  const sql = `
+  // SCRIPT AUTOMÁTICO: Crea las tablas y mete los datos si no existen al arrancar el servidor
+  const initDb = async () => {
+    const sql = `
 
-    CREATE TABLE IF NOT EXISTS public.users (
-        user_id SERIAL PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        email VARCHAR(150) NOT NULL UNIQUE,
-        password_hash VARCHAR(255) NOT NULL,
-        role VARCHAR(20) NOT NULL DEFAULT 'user'
-    );
+      CREATE TABLE IF NOT EXISTS public.users (
+          user_id SERIAL PRIMARY KEY,
+          name VARCHAR(100) NOT NULL,
+          email VARCHAR(150) NOT NULL UNIQUE,
+          password_hash VARCHAR(255) NOT NULL,
+          role VARCHAR(20) NOT NULL DEFAULT 'user'
+      );
 
-    -- Cuenta de prueba para el grader (password: cse340!)
-    INSERT INTO public.users (name, email, password_hash, role) VALUES
+      -- Cuenta de prueba para el grader (password: cse340!)
+      INSERT INTO public.users (name, email, password_hash, role) VALUES
     ('Admin Account', 'admin@example.com', '$2b$10$R2JMeFUL6DBBGvKHTIP05uYCnk8GKYmYqdXDljSinJ6v/9ZofyEoG', 'admin')
     ON CONFLICT (email) DO UPDATE SET role = 'admin';
 
@@ -80,7 +80,7 @@ const initDb = async () => {
     (3, 'Rehabilitación de Viviendas', 'Pintura y arreglos', 'Sector Oeste', '2026-04-08') ON CONFLICT (title, organization_id) DO NOTHING;
 
     INSERT INTO public.categories (name) VALUES 
-    ('Medio Ambiente'), ('Educación'), ('Soporte Comunitario') ) ON CONFLICT (title, organization_id) DO NOTHING;
+    ('Medio Ambiente'), ('Educación'), ('Soporte Comunitario') ON CONFLICT DO NOTHING;
 
     INSERT INTO public.project_categories (project_id, category_id) VALUES 
     (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2), (11, 3), (12, 3), (13, 3), (14, 3), (15, 3) ON CONFLICT DO NOTHING;

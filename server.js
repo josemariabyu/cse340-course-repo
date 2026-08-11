@@ -64,8 +64,9 @@ app.use((req, res) => {
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).render('error', {
-    title: 'Server Error',
+  const status = err.status || 500;
+  res.status(status).render('error', {
+    title: status === 404 ? 'Page Not Found' : 'Server Error',
     message: err.message || 'Something went wrong.'
   });
 });
