@@ -106,3 +106,14 @@ export async function getVolunteeredProjectsByUser(user_id) {
   const result = await db.query(sql, [user_id]);
   return result.rows;
 }
+// Proyectos de una organización específica
+export async function getProjectsByOrganization(organization_id) {
+  const sql = `
+    SELECT *
+    FROM service_projects
+    WHERE organization_id = $1
+    ORDER BY date DESC
+  `;
+  const result = await db.query(sql, [organization_id]);
+  return result.rows;
+}

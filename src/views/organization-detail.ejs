@@ -1,0 +1,39 @@
+<%- include('partials/header') %>
+
+<h2>Organización: <%= organization.name %></h2>
+
+<div class="project-card-detail" style="background:#f8f9fa; padding:20px; border-radius:5px; margin-top:1.5rem;">
+  <p><strong>ID:</strong> <%= organization.organization_id %></p>
+
+  <h3 style="margin-top:1.5rem;">Proyectos de servicio de esta organización</h3>
+  <% if (projects && projects.length > 0) { %>
+    <ul style="line-height: 2;">
+      <% projects.forEach(p => { %>
+        <li>
+          <a href="/project/<%= p.project_id %>"
+             style="color:#28a745; font-weight:bold; text-decoration:none;">
+            <%= p.name %>
+          </a>
+          <small style="color:#6c757d;">
+            (<%= p.date ? new Date(p.date).toLocaleDateString() : 'Sin fecha' %>)
+          </small>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p style="color:#6c757d; font-style:italic;">
+      Todavía no hay proyectos asociados a esta organización.
+    </p>
+  <% } %>
+
+  <div style="margin-top:1.5rem;">
+    <a href="/edit-organization/<%= organization.organization_id %>"
+       style="color:#007bff;">✏️ Editar organización</a>
+  </div>
+</div>
+
+<div style="margin-top:2rem;">
+  <a href="/organizations" style="color:#007bff; text-decoration:none;">← Volver a Organizaciones</a>
+</div>
+
+<%- include('partials/footer') %>

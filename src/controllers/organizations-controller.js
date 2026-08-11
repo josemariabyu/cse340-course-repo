@@ -1,4 +1,4 @@
-import { validationResult } from 'express-validator';
+import { getProjectsByOrganization } from '../models/projects.js';
 import {
   getAllOrganizations,
   getOrganizationById,
@@ -14,6 +14,36 @@ export async function getOrganizationsList(req, res, next) {
       title: 'Organizations',
       organizations: organizations || []
     });
+  } catch (error) {
+    next(error);
+  }
+}
+// Detalle de organización (W03)
+export async function getOrganizationDetails(req, res, next) {
+  try {
+    const organizationId = req.params.id;
+    if (isNaN(parseInt(organizationId, 10))) {
+      const err = new Error('Organization not found');
+      err.status = 404;
+      return next(err);
+    }
+
+    const rows = await getOrganizationById(organizationId);
+    const organization = rows.length > 0 ? rows[0] : null;
+    if (!organization) {
+      const err = new Error('Organization not found');
+      err.status = 404;
+      return next(err);
+    }
+
+    const rawProjects = await getProjectsByOrganization(organizationId);
+    const projects = rawProjects.map(p => ({
+      project_id: p.project_id,
+      name: p.title,
+      date: p.date
+    }));
+
+    res.render('organization-detail', { title: organization.name, organization, projects });
   } catch (error) {
     next(error);
   }

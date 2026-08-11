@@ -68,8 +68,7 @@ INSERT INTO service_projects (organization_id, title, description, location, dat
 (3, 'Colecta de Ropa de Invierno', 'Clasificación de prendas', 'Almacén Central', '2026-03-19'),
 (3, 'Entrega de Alimentos', 'Distribución de canastas', 'Barrio San José', '2026-03-24'),
 (3, 'Campaña de Salud Visual', 'Exámenes gratuitos', 'Clínica Comunal', '2026-03-30'),
-(3, 'Rehabilitación de Viviendas', 'Pintura y arreglos', 'Sector Oeste', '2026-04-08')
-ON CONFLICT DO NOTHING;
+(3, 'Rehabilitación de Viviendas', 'Pintura y arreglos', 'Sector Oeste', '2026-04-08') ON CONFLICT (title, organization_id) DO NOTHING;
 
 -- Insertar las 3 categorías requeridas
 INSERT INTO categories (name) VALUES 

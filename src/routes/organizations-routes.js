@@ -2,6 +2,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import {
   getOrganizationsList,
+  getOrganizationDetails,
   newOrganizationForm,
   createOrganization,
   editOrganizationForm,
@@ -18,6 +19,9 @@ const organizationValidationRules = [
     .isLength({ min: 3 }).withMessage('Organization name must be at least 3 characters long.')
     .isLength({ max: 150 }).withMessage('Organization name must be 150 characters or less.')
 ];
+
+//ruta nueva publica
+router.get('/organization/:id', getOrganizationDetails);
 
 // Listado (público)
 router.get('/organizations', getOrganizationsList);

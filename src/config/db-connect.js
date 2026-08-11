@@ -77,10 +77,10 @@ const initDb = async () => {
     (3, 'Colecta de Ropa de Invierno', 'Clasificación de prendas', 'Almacén Central', '2026-03-19'),
     (3, 'Entrega de Alimentos', 'Distribución de canastas', 'Barrio San José', '2026-03-24'),
     (3, 'Campaña de Salud Visual', 'Exámenes gratuitos', 'Clínica Comunal', '2026-03-30'),
-    (3, 'Rehabilitación de Viviendas', 'Pintura y arreglos', 'Sector Oeste', '2026-04-08') ON CONFLICT DO NOTHING;
+    (3, 'Rehabilitación de Viviendas', 'Pintura y arreglos', 'Sector Oeste', '2026-04-08') ON CONFLICT (title, organization_id) DO NOTHING;
 
     INSERT INTO public.categories (name) VALUES 
-    ('Medio Ambiente'), ('Educación'), ('Soporte Comunitario') ON CONFLICT DO NOTHING;
+    ('Medio Ambiente'), ('Educación'), ('Soporte Comunitario') ) ON CONFLICT (title, organization_id) DO NOTHING;
 
     INSERT INTO public.project_categories (project_id, category_id) VALUES 
     (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2), (11, 3), (12, 3), (13, 3), (14, 3), (15, 3) ON CONFLICT DO NOTHING;
