@@ -8,7 +8,12 @@ import {
   removeVolunteer,
   isVolunteering
 } from '../models/projects.js';
-import { getCategoriesByProject } from '../models/categories.js';
+import {
+  getCategoriesByProject,
+  getAllCategories,
+  getCategoryIdsForProject,
+  setCategoriesForProject
+} from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
 
 // Listado de proyectos
@@ -148,6 +153,7 @@ export async function editProject(req, res, next) {
     next(error);
   }
 }
+
 // ---------- VOLUNTEER (W06) ----------
 export async function volunteerForProject(req, res, next) {
   try {
@@ -181,6 +187,56 @@ export async function unvolunteerFromProject(req, res, next) {
     // Si viene desde el dashboard, volver ahí; si no, volver al detalle del proyecto
     const redirectTo = req.body.redirectTo === 'dashboard' ? '/dashboard' : `/project/${projectId}`;
     res.redirect(redirectTo);
+  } catch (error) {
+    next(error);
+  }
+}
+
+// ---------- ASSIGN CATEGORIES (W04) ----------
+export async function assignCategoriesForm(req, res, next) {
+  try {
+    const projectId = req.params.id;
+    const rows = await getProjectById(projectId);
+    const rawProject = rows.length > 0 ? rows[0] : null;
+    if (!rawProject) {
+      const err = new Error('Project not found');
+      err.status = 404;
+      return next(err);
+    }
+
+    const allCategories = await getAllCategories();
+    const assignedIds = await getCategoryIdsForProject(projectId);
+
+    const categories = allCategories.map(c => ({
+      category_id: c.category_id,
+      name: c.name,
+      checked: assignedIds.includes(c.category_id)
+    }));
+
+    res.render('assign-categories', {
+      title: `Assign Categories - ${rawProject.title}`,
+      project: rawProject,
+      categories
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateProjectCategories(req, res, next) {
+  try {
+    const projectId = req.params.id;
+    let categoryIds = req.body.category_ids || [];
+    if (!Array.isArray(categoryIds)) categoryIds = [categoryIds];
+    categoryIds = categoryIds.map(id => parseInt(id, 10));
+
+    await setCategoriesForProject(projectId, categoryIds);
+
+    req.session.message = {
+      type: 'success',
+      text: 'Categories updated successfully.'
+    };
+    res.redirect(`/project/${projectId}`);
   } catch (error) {
     next(error);
   }

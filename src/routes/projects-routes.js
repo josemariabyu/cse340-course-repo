@@ -8,9 +8,12 @@ import {
   editProjectForm,
   editProject,
   volunteerForProject,
-  unvolunteerFromProject
+  unvolunteerFromProject,
+  assignCategoriesForm,
+  updateProjectCategories
 } from '../controllers/projects-controller.js';
 import { requireLogin, requireRole } from '../middleware/auth.js';
+
 
 const router = express.Router();
 
@@ -48,5 +51,8 @@ router.post('/edit-project/:id', requireLogin, requireRole('admin'), projectVali
 // W06: voluntariado (cualquier usuario logueado, no solo admin)
 router.post('/project/:id/volunteer', requireLogin, volunteerForProject);
 router.post('/project/:id/unvolunteer', requireLogin, unvolunteerFromProject);
+
+router.get('/project/:id/categories', requireLogin, requireRole('admin'), assignCategoriesForm);
+router.post('/project/:id/categories', requireLogin, requireRole('admin'), updateProjectCategories);
 
 export default router;

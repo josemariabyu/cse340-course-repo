@@ -40,6 +40,15 @@
         <% } %>
     <% } %>
 </div>
+
+<% if (typeof isAdmin !== 'undefined' && isAdmin) { %>
+  <div style="margin-top:1rem;">
+    <a href="/project/<%= project.project_id %>/categories" style="color:#007bff;">
+      🏷️ Update categories
+    </a>
+  </div>
+<% } %>
+
 <div style="margin-top: 2rem;">
     <a href="/projects" style="color: #007bff; text-decoration: none;">← Volver a Proyectos</a>
 </div>

@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+
+<h2>Assign Categories: <%= project.title %></h2>
+<p>Marcá o desmarcá las categorías que apliquen a este proyecto, y guardá los cambios.</p>
+
+<form action="/project/<%= project.project_id %>/categories" method="POST" class="app-form">
+  <fieldset style="border:none; padding:0;">
+    <% categories.forEach(cat => { %>
+      <label style="display:block; margin-bottom:0.75rem; font-weight:normal;">
+        <input type="checkbox" name="category_ids" value="<%= cat.category_id %>"
+               <%= cat.checked ? 'checked' : '' %>>
+        <%= cat.name %>
+      </label>
+    <% }) %>
+  </fieldset>
+
+  <div class="form-actions" style="margin-top:1.5rem;">
+    <button type="submit" class="btn btn-primary">Save categories</button>
+    <a class="btn-link" href="/project/<%= project.project_id %>">Cancel</a>
+  </div>
+</form>
+
+<%- include('partials/footer') %>
