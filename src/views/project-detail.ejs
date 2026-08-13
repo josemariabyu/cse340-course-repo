@@ -43,6 +43,11 @@
 
 <% if (typeof isAdmin !== 'undefined' && isAdmin) { %>
   <div style="margin-top:1rem;">
+    <a href="/edit-project/<%= project.project_id %>" style="color:#007bff;">
+      ✏️ Edit project
+    </a>
+  </div>
+  <div style="margin-top:1rem;">
     <a href="/project/<%= project.project_id %>/categories" style="color:#007bff;">
       🏷️ Update categories
     </a>

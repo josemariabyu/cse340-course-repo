@@ -16,15 +16,12 @@ ON CONFLICT DO NOTHING;
 -- =======================================================
 -- 2. TABLA DE PROYECTOS (Actividad en Equipo)
 -- =======================================================
-CREATE TABLE IF NOT EXISTS service_projects (
-    project_id SERIAL PRIMARY KEY,
-    organization_id INT NOT NULL,
-    title VARCHAR(150) NOT NULL,
+CREATE TABLE IF NOT EXISTS public.organizations (
+    organization_id SERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL UNIQUE,
     description TEXT,
-    location VARCHAR(255) NOT NULL,
-    date DATE NOT NULL,
-    CONSTRAINT fk_organization FOREIGN KEY (organization_id) 
-        REFERENCES organizations(organization_id) ON DELETE CASCADE
+    email VARCHAR(150),
+    image_url VARCHAR(255)
 );
 
 -- =======================================================

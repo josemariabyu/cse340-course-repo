@@ -104,8 +104,8 @@ export async function createProject(req, res, next) {
         oldData: req.body
       });
     }
-    const { title, description, location, organization_id } = req.body;
-    await insertProject(title, description, location, organization_id);
+    const { title, description, location, organization_id, date } = req.body;
+    await insertProject(title, description, location, organization_id, date);
     res.redirect('/projects');
   } catch (error) {
     next(error);
@@ -136,18 +136,18 @@ export async function editProjectForm(req, res, next) {
 
 export async function editProject(req, res, next) {
   const errors = validationResult(req);
-  const { title, description, location, organization_id } = req.body;
+  const { title, description, location, organization_id, date } = req.body;
   try {
     if (!errors.isEmpty()) {
       const organizations = await getAllOrganizations();
       return res.status(400).render('edit-project', {
         title: 'Edit Service Project',
         errors: errors.array(),
-        project: { project_id: req.params.id, title, description, location, organization_id },
+        project: { project_id: req.params.id, title, description, location, organization_id, date },
         organizations
       });
     }
-    await updateProject(req.params.id, title, description, location, organization_id);
+    await updateProject(req.params.id, title, description, location, organization_id, date);
     res.redirect('/projects');
   } catch (error) {
     next(error);

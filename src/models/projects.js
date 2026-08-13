@@ -39,25 +39,24 @@ export async function getProjectsByCategory(category_id) {
 }
 
 // W04: insertar proyecto
-export async function insertProject(title, description, location, organization_id) {
+export async function insertProject(title, description, location, organization_id, date) {
   const sql = `
     INSERT INTO service_projects (title, description, location, organization_id, date)
-    VALUES ($1, $2, $3, $4, NOW())
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *
   `;
-  const result = await db.query(sql, [title, description, location, organization_id]);
+  const result = await db.query(sql, [title, description, location, organization_id, date]);
   return result.rows[0];
 }
 
-// W04: actualizar proyecto
-export async function updateProject(project_id, title, description, location, organization_id) {
+export async function updateProject(project_id, title, description, location, organization_id, date) {
   const sql = `
     UPDATE service_projects
-    SET title = $1, description = $2, location = $3, organization_id = $4
-    WHERE project_id = $5
+    SET title = $1, description = $2, location = $3, organization_id = $4, date = $5
+    WHERE project_id = $6
     RETURNING *
   `;
-  const result = await db.query(sql, [title, description, location, organization_id, project_id]);
+  const result = await db.query(sql, [title, description, location, organization_id, date, project_id]);
   return result.rows[0];
 }
 // ---------- W06: VOLUNTEERS ----------

@@ -33,7 +33,10 @@ const projectValidationRules = [
     .isLength({ max: 255 }).withMessage('Location must be 255 characters or less.'),
   body('organization_id')
     .notEmpty().withMessage('Organization is required.')
-    .isInt().withMessage('Organization is not valid.')
+    .isInt().withMessage('Organization is not valid.'),
+  body('date')
+  .notEmpty().withMessage('Date is required.')
+  .isISO8601().withMessage('Date must be a valid date.')  
 ];
 
 // Listado y detalle (público)

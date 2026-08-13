@@ -25,7 +25,10 @@
 
   <label for="location">Location</label>
   <input type="text" id="location" name="location" required maxlength="255" value="<%= oldData.location %>">
-
+  
+  <label for="date">Date</label>
+  <input type="date" id="date" name="date" required value="<%= oldData.date || '' %>">
+  
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Save project</button>
     <a class="btn-link" href="/projects">Cancel</a>

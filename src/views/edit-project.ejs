@@ -25,6 +25,9 @@
   <label for="location">Location</label>
   <input type="text" id="location" name="location" required maxlength="255" value="<%= project.location %>">
 
+  <label for="date">Date</label>
+  <input type="date" id="date" name="date" required value="<%= project.date ? project.date.toISOString().split('T')[0] : '' %>">
+  
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Update project</button>
     <a class="btn-link" href="/projects">Cancel</a>

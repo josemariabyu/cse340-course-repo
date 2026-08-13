@@ -1,4 +1,4 @@
-import { getProjectsByOrganization } from '../models/projects.js';
+import { validationResult } from 'express-validator';
 import {
   getAllOrganizations,
   getOrganizationById,
@@ -18,6 +18,7 @@ export async function getOrganizationsList(req, res, next) {
     next(error);
   }
 }
+
 // Detalle de organización (W03)
 export async function getOrganizationDetails(req, res, next) {
   try {
@@ -36,6 +37,7 @@ export async function getOrganizationDetails(req, res, next) {
       return next(err);
     }
 
+    const { getProjectsByOrganization } = await import('../models/projects.js');
     const rawProjects = await getProjectsByOrganization(organizationId);
     const projects = rawProjects.map(p => ({
       project_id: p.project_id,
@@ -54,7 +56,7 @@ export function newOrganizationForm(req, res) {
   res.render('new-organization', {
     title: 'New Organization',
     errors: null,
-    oldData: { name: '' }
+    oldData: { name: '', description: '', email: '' }
   });
 }
 
@@ -68,7 +70,8 @@ export async function createOrganization(req, res, next) {
     });
   }
   try {
-    await insertOrganization(req.body.name);
+    const { name, description, email } = req.body;
+    await insertOrganization(name, description, email);
     res.redirect('/organizations');
   } catch (error) {
     next(error);
@@ -97,15 +100,16 @@ export async function editOrganizationForm(req, res, next) {
 
 export async function editOrganization(req, res, next) {
   const errors = validationResult(req);
+  const { name, description, email, image_url } = req.body;
   if (!errors.isEmpty()) {
     return res.status(400).render('edit-organization', {
       title: 'Edit Organization',
       errors: errors.array(),
-      organization: { organization_id: req.params.id, name: req.body.name }
+      organization: { organization_id: req.params.id, name, description, email, image_url }
     });
   }
   try {
-    await updateOrganization(req.params.id, req.body.name);
+    await updateOrganization(req.params.id, name, description, email, image_url);
     res.redirect('/organizations');
   } catch (error) {
     next(error);

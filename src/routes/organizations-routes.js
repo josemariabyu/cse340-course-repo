@@ -17,11 +17,15 @@ const organizationValidationRules = [
     .trim()
     .notEmpty().withMessage('Organization name is required.')
     .isLength({ min: 3 }).withMessage('Organization name must be at least 3 characters long.')
-    .isLength({ max: 150 }).withMessage('Organization name must be 150 characters or less.')
+    .isLength({ max: 150 }).withMessage('Organization name must be 150 characters or less.'),
+  body('description')
+    .trim()
+    .notEmpty().withMessage('Description is required.'),
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required.')
+    .isEmail().withMessage('A valid email is required.')
 ];
-
-//ruta nueva publica
-router.get('/organization/:id', getOrganizationDetails);
 
 // Listado (público)
 router.get('/organizations', getOrganizationsList);
@@ -33,5 +37,8 @@ router.post('/new-organization', requireLogin, requireRole('admin'), organizatio
 // EDIT (solo admin)
 router.get('/edit-organization/:id', requireLogin, requireRole('admin'), editOrganizationForm);
 router.post('/edit-organization/:id', requireLogin, requireRole('admin'), organizationValidationRules, editOrganization);
+
+// Detalle (público)
+router.get('/organization/:id', getOrganizationDetails);
 
 export default router;

@@ -19,12 +19,12 @@
   const initDb = async () => {
     const sql = `
 
-      CREATE TABLE IF NOT EXISTS public.users (
-          user_id SERIAL PRIMARY KEY,
-          name VARCHAR(100) NOT NULL,
-          email VARCHAR(150) NOT NULL UNIQUE,
-          password_hash VARCHAR(255) NOT NULL,
-          role VARCHAR(20) NOT NULL DEFAULT 'user'
+      CREATE TABLE IF NOT EXISTS public.organizations (
+       organization_id SERIAL PRIMARY KEY,
+       name VARCHAR(150) NOT NULL UNIQUE,
+       description TEXT,
+       email VARCHAR(150),
+       image_url VARCHAR(255)
       );
 
       -- Cuenta de prueba para el grader (password: cse340!)
