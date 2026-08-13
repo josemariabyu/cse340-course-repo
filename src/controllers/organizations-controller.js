@@ -72,6 +72,10 @@ export async function createOrganization(req, res, next) {
   try {
     const { name, description, email } = req.body;
     await insertOrganization(name, description, email);
+    req.session.message = {
+     type: 'success',
+     text: 'Organization created successfully.'
+  };
     res.redirect('/organizations');
   } catch (error) {
     next(error);
@@ -110,6 +114,10 @@ export async function editOrganization(req, res, next) {
   }
   try {
     await updateOrganization(req.params.id, name, description, email, image_url);
+    req.session.message = {
+      type: 'success',
+      text: 'Organization updated successfully.'
+    };
     res.redirect('/organizations');
   } catch (error) {
     next(error);

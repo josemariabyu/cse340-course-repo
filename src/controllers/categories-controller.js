@@ -71,6 +71,7 @@ export async function createCategory(req, res, next) {
   }
   try {
     await insertCategory(req.body.name);
+    req.session.message = { type: 'success', text: 'Category created successfully.' };
     res.redirect('/categories');
   } catch (error) {
     next(error);
@@ -108,6 +109,7 @@ export async function editCategory(req, res, next) {
   }
   try {
     await updateCategory(req.params.id, req.body.name);
+    req.session.message = { type: 'success', text: 'Category updated successfully.' };
     res.redirect('/categories');
   } catch (error) {
     next(error);

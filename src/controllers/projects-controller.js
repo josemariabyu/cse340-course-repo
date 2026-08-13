@@ -106,6 +106,10 @@ export async function createProject(req, res, next) {
     }
     const { title, description, location, organization_id, date } = req.body;
     await insertProject(title, description, location, organization_id, date);
+    req.session.message = {
+      type: 'success',
+      text: 'Project created successfully.'
+    };
     res.redirect('/projects');
   } catch (error) {
     next(error);
@@ -148,6 +152,10 @@ export async function editProject(req, res, next) {
       });
     }
     await updateProject(req.params.id, title, description, location, organization_id, date);
+    req.session.message = {
+      type: 'success',
+      text: 'Project updated successfully.'
+    };
     res.redirect('/projects');
   } catch (error) {
     next(error);
